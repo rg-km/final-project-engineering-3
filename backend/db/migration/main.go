@@ -22,24 +22,24 @@ func Migrate() (*sql.DB, error) {
 			is_logged_in INTEGER NOT NULL,
 			activation_token VARCHAR(255) NOT NULL,
 			activation_token_expiration TIMESTAMP NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (role_id) REFERENCES role (id)
 		);
 
 		CREATE TABLE IF NOT EXISTS role (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 
 		CREATE TABLE IF NOT EXISTS admin_profile (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
 			user_id INTEGER NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (user_id) REFERENCES user (id)
 		);
 
@@ -53,8 +53,8 @@ func Migrate() (*sql.DB, error) {
 			phone_number VARCHAR(255) NOT NULL,
 			logo VARCHAR(255) NOT NULL,
 			user_id INTEGER NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (industry_category_id) REFERENCES industry_category (id),
 			FOREIGN KEY (user_id) REFERENCES user (id)
 		);
@@ -62,8 +62,8 @@ func Migrate() (*sql.DB, error) {
 		CREATE TABLE IF NOT EXISTS industry_category (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 
 		CREATE TABLE IF NOT EXISTS researcher_profile (
@@ -77,8 +77,8 @@ func Migrate() (*sql.DB, error) {
 			bank_account_num VARCHAR(255) NOT NULL,
 			bank_name VARCHAR(255) NOT NULL,
 			user_id INTEGER NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (user_id) REFERENCES user (id)
 		);
 
@@ -93,8 +93,8 @@ func Migrate() (*sql.DB, error) {
 			guide_file VARCHAR(255) NOT NULL,
 			quota INTEGER NOT NULL,
 			industry_id INTEGER NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (research_category_id) REFERENCES research_category (id),
 			FOREIGN KEY (industry_id) REFERENCES industry_profile (id)
 		);
@@ -102,8 +102,8 @@ func Migrate() (*sql.DB, error) {
 		CREATE TABLE IF NOT EXISTS research_category (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 
 		CREATE TABLE IF NOT EXISTS proposal (
@@ -112,8 +112,8 @@ func Migrate() (*sql.DB, error) {
 			abstract TEXT NOT NULL,
 			proposal_doc VARCHAR(255) NOT NULL,
 			other_doc VARCHAR(255) NOT NULL,
-			submit_date TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			submit_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (researcher_id) REFERENCES researcher_profile (id)
 		);
 
@@ -123,8 +123,8 @@ func Migrate() (*sql.DB, error) {
 			proposal_id INTEGER NOT NULL,
 			funding_status_id INTEGER NOT NULL,
 			total_score INTEGER NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (research_item_id) REFERENCES research_item (id),
 			FOREIGN KEY (proposal_id) REFERENCES proposal (id),
 			FOREIGN KEY (funding_status_id) REFERENCES funding_status (id)
@@ -133,8 +133,8 @@ func Migrate() (*sql.DB, error) {
 		CREATE TABLE IF NOT EXISTS funding_status (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 
 		CREATE TABLE IF NOT EXISTS review_score (
@@ -142,8 +142,8 @@ func Migrate() (*sql.DB, error) {
 			review_id INTEGER NOT NULL,
 			aspect_id INTEGER NOT NULL,
 			score INTEGER NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (review_id) REFERENCES research_proposal_review (id),
 			FOREIGN KEY (aspect_id) REFERENCES assesment_aspect (id)
 		);
@@ -151,9 +151,45 @@ func Migrate() (*sql.DB, error) {
 		CREATE TABLE IF NOT EXISTS assesment_aspect (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			aspect_detail TEXT NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
+
+		INSERT INTO role (name) VALUES
+			('admin'),
+			('industry'),
+			('researcher');
+
+		INSERT INTO industry_category (name) VALUES
+			('Arsitektur'),
+			('Desain'),
+			('Edukasi'),
+			('Manufaktur'),
+			('Minyak Gas'),
+			('Otomotif'),
+			('Konstruksi'),
+			('Pembangkit Energi');
+
+		INSERT INTO research_category (name) VALUES
+			('Descriptive'),
+			('Exploratory'),
+			('Corelational'),
+			('Explanatory');
+
+		INSERT INTO funding_status (name) VALUES
+			('Reviewed'),
+			('Funded'),
+			('Rejected');
+
+		INSERT INTO assesment_aspect (aspect_detail) VALUES
+			('Kelengkapan dokumen'),
+			('Kualitas'),
+			('Luaran'),
+			('Kemutakhiran'),
+			('Rekam Jejak Periset'),
+			('Pembagian peran antara kelompok riset'),
+			('Market test'),
+			('Business plan');
 	`)
 
 	if err != nil {
