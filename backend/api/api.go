@@ -8,16 +8,18 @@ import (
 )
 
 type API struct {
+	usersRepo repository.UserRepository
 	mux *http.ServeMux
 }
 
-func NewApi(exampleRepository repository.ExampleRepository) API {
+func NewApi(usersRepo repository.UserRepository) API {
 	mux := http.NewServeMux()
 	api := API{
+		usersRepo,
 		mux,
 	}
 
-	mux.Handle("/", api.GET(http.HandlerFunc(api.HelloWorld)))
+	mux.Handle("/login", api.POST(http.HandlerFunc(api.login)))
 
 	return api
 }
