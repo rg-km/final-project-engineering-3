@@ -15,8 +15,8 @@ func main() {
 		panic(err)
 	}
 
-	exampleRepo := repository.NewExampleRepository(db)
+	usersRepo := repository.NewUserRepository(db)
 
-	mainAPI := api.NewApi(*exampleRepo)
+	mainAPI := api.NewApi(*usersRepo)
 	mainAPI.Start()
 }
