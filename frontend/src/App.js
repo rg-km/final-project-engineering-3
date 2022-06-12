@@ -1,6 +1,7 @@
 import TopBar from './shared/components/TopBar'
 import { Route, Routes } from 'react-router-dom'
 import Login from './login/Login'
+import { Signup } from './signup/Signup'
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <TopBar />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup/>}/>
       </Routes>
     </div>
   )
