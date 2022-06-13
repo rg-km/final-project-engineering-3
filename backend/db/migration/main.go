@@ -20,8 +20,8 @@ func Migrate() (*sql.DB, error) {
 			email VARCHAR(255) NOT NULL,
 			role_id INTEGER NOT NULL,
 			is_logged_in INTEGER NOT NULL,
-			activation_token VARCHAR(255) NOT NULL,
-			activation_token_expiration TIMESTAMP NOT NULL,
+			activation_token VARCHAR(255),
+			activation_token_expiration TIMESTAMP,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (role_id) REFERENCES role (id)
@@ -154,6 +154,9 @@ func Migrate() (*sql.DB, error) {
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
+
+		INSERT INTO user (username, password, email, role_id, is_logged_in) VALUES
+			('examplename', '$2a$14$RUJjJuC99z2LQe/1liXLYu2bp/C2zGizNlQmJAQfX2MeHim2pVTNW', 'name@example.com', 2, 0);
 
 		INSERT INTO role (name) VALUES
 			('admin'),
