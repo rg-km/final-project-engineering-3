@@ -8,23 +8,22 @@ import (
 )
 
 type API struct {
-	usersRepo     repository.UserRepository
-	dashboardRepo repository.DashboardRepository
-	mux           *http.ServeMux
+	usersRepo repository.UserRepository
+	mux       *http.ServeMux
 }
 
-func NewApi(usersRepo repository.UserRepository, dashboardRepo repository.DashboardRepository) API {
+func NewApi(usersRepo repository.UserRepository) API {
 	mux := http.NewServeMux()
 	api := API{
 		usersRepo,
-		dashboardRepo,
 		mux,
 	}
 
 	mux.Handle("/login", api.POST(http.HandlerFunc(api.login)))
 
+	// API with AuthMiddleware and AdminMiddleware
 	// API with AuthMiddleware and IndustryMiddleware
-	mux.Handle("/dashboard", api.GET(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.dashboard)))))
+	// API with AuthMiddleware and ResearcherMiddleware
 
 	return api
 }
