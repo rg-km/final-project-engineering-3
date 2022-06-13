@@ -8,16 +8,16 @@ import (
 )
 
 type API struct {
-	usersRepo   repository.UserRepository
-	exampleRepo repository.DashboardRepository
-	mux         *http.ServeMux
+	usersRepo     repository.UserRepository
+	dashboardRepo repository.DashboardRepository
+	mux           *http.ServeMux
 }
 
-func NewApi(usersRepo repository.UserRepository, exampleRepo repository.DashboardRepository) API {
+func NewApi(usersRepo repository.UserRepository, dashboardRepo repository.DashboardRepository) API {
 	mux := http.NewServeMux()
 	api := API{
 		usersRepo,
-		exampleRepo,
+		dashboardRepo,
 		mux,
 	}
 
