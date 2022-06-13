@@ -7,12 +7,12 @@ import (
 )
 
 type User struct {
-	ID 			int64 	`json:"id"`
-	Username 	string	`json:"username"`
-	Password 	string 	`json:"password"`
-	Email 		string 	`json:"email"`
-	RoleID 		int64 	`json:"role_id"`
-	IsLoggedin 	bool 	`json:"is_loggedin"`
+	ID         int64  `json:"id"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	Email      string `json:"email"`
+	RoleID     int64  `json:"role_id"`
+	IsLoggedin bool   `json:"is_loggedin"`
 }
 
 type UserRepository struct {
@@ -23,12 +23,11 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (u *UserRepository) Login(username, password string) (*string, *int64,  error) {
+func (u *UserRepository) Login(username, password string) (*string, *int64, error) {
 	var sqlStatement string
 	var user User
 
-
-	sqlStatement = "SELECT id, username, password, role_id, is_logged_in FROM user WHERE username = ?"	
+	sqlStatement = "SELECT id, username, password, role_id, is_logged_in FROM user WHERE username = ?"
 
 	row := u.db.QueryRow(sqlStatement, username, password)
 	err := row.Scan(
@@ -61,7 +60,7 @@ func (u *UserRepository) FetchRoleByID(id int64) (*string, error) {
 	var sqlStatement string
 	var role string
 
-	sqlStatement = "SELECT name FROM role WHERE id = ?"	
+	sqlStatement = "SELECT name FROM role WHERE id = ?"
 
 	row := u.db.QueryRow(sqlStatement, id)
 	err := row.Scan(&role)
@@ -70,4 +69,24 @@ func (u *UserRepository) FetchRoleByID(id int64) (*string, error) {
 	}
 
 	return &role, nil
+}
+
+func (u *UserRepository) Register(username, password, email string, role_id int64) (*int64, error) {
+	var sqlStatement string
+	var id int64
+
+	sqlStatement = "INSERT INTO user (username, password, email, role_id, is_logged_in, activation_token, activation_token_expiration) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id"
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+
+	row := u.db.QueryRow(sqlStatement, username, hashedPassword, email, role_id, 0, "", "")
+	err = row.Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
 }
