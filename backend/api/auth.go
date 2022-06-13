@@ -10,6 +10,7 @@ import (
 
 type LoginSuccessResponse struct {
 	Username string `json:"username"`
+	Role	 string `json:"role"`
 	Token    string `json:"token"`
 }
 
@@ -43,7 +44,7 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 
 	username, roleID, err := api.usersRepo.Login(creds.Username, creds.Password)
 	if err != nil {
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: "Login failed!"})
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -81,6 +82,7 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 
 	response := LoginSuccessResponse{
 		Username: *username,
+		Role:     *roleName,
 		Token:    tokenString,
 	}
 
