@@ -9,7 +9,7 @@ import (
 
 type API struct {
 	usersRepo repository.UserRepository
-	mux *http.ServeMux
+	mux       *http.ServeMux
 }
 
 func NewApi(usersRepo repository.UserRepository) API {
@@ -20,6 +20,7 @@ func NewApi(usersRepo repository.UserRepository) API {
 	}
 
 	mux.Handle("/login", api.POST(http.HandlerFunc(api.login)))
+	mux.Handle("/register", api.POST(http.HandlerFunc(api.register)))
 
 	return api
 }

@@ -13,6 +13,12 @@ type LoginSuccessResponse struct {
 	Token    string `json:"token"`
 }
 
+type RegisterSuccessResponse struct {
+	ID      int64  `json:"role_id"`
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
 type AuthErrorResponse struct {
 	Error string `json:"error"`
 }
@@ -28,6 +34,8 @@ type Claims struct {
 type Credentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Email    string `json:"email"`
+	Role     int64  `json:"role_id"`
 }
 
 func (api *API) login(w http.ResponseWriter, r *http.Request) {
@@ -74,14 +82,41 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
-		Value:    tokenString,
-		Expires:  tokenExpirationTime,
+		Name:    "token",
+		Value:   tokenString,
+		Expires: tokenExpirationTime,
 	})
-	
+
 	response := LoginSuccessResponse{
 		Username: *username,
 		Token:    tokenString,
+	}
+
+	json.NewEncoder(w).Encode(response)
+}
+
+func (api *API) register(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+	var creds Credentials
+
+	err := json.NewDecoder(r.Body).Decode(&creds)
+	if err != nil {
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	id, err := api.usersRepo.Register(creds.Username, creds.Password, creds.Email, creds.Role)
+	if err != nil {
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	response := RegisterSuccessResponse{
+		ID:      *id,
+		Status:  "success",
+		Message: "User registered successfully",
 	}
 
 	json.NewEncoder(w).Encode(response)
