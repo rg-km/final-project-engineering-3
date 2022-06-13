@@ -4,10 +4,10 @@ import (
 	"database/sql"
 )
 
-type ExampleRepository struct {
+type DashboardRepository struct {
 	db *sql.DB
 }
 
-func NewExampleRepository(db *sql.DB) *ExampleRepository {
-	return &ExampleRepository{db: db}
+func NewDashboardRepository(db *sql.DB) *DashboardRepository {
+	return &DashboardRepository{db: db}
 }

@@ -74,11 +74,11 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
-		Value:    tokenString,
-		Expires:  tokenExpirationTime,
+		Name:    "token",
+		Value:   tokenString,
+		Expires: tokenExpirationTime,
 	})
-	
+
 	response := LoginSuccessResponse{
 		Username: *username,
 		Token:    tokenString,
