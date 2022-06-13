@@ -2,7 +2,7 @@ import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 
 
-export const SignupForm = ( {role} ) => {
+const SignupForm = ( {role} ) => {
   return (
     <div className="bg-white p-10 mt-10 w-1/4">
       <div className="flex flex-col items-center">
@@ -31,3 +31,5 @@ export const SignupForm = ( {role} ) => {
     </div>
   )
 }
+
+export default SignupForm
