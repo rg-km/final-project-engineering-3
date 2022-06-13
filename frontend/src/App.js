@@ -1,7 +1,7 @@
 import TopBar from './shared/components/TopBar'
 import { Route, Routes } from 'react-router-dom'
 import Login from './login/Login'
-import { Signup } from './signup/Signup'
+import Signup from './signup/Signup'
 
 function App() {
   return (

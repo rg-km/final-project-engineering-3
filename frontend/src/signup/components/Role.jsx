@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 
-export const Role = ( {selectRole} ) => {
+const Role = ( {selectRole} ) => {
   return (
     <div className="bg-white p-10 mt-10 w-1/4">
         <h1 className="text-4xl font-semibold">Daftar</h1>
@@ -26,3 +26,5 @@ export const Role = ( {selectRole} ) => {
     </div>
   )
 }
+
+export default Role

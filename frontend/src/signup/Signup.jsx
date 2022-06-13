@@ -4,7 +4,7 @@ import Role from './components/Role'
 import SignupForm from './components/SignupForm'
 
 
-export const Signup = () => {
+const Signup = () => {
   const [role, setRole] = useState('')
 
   return (
@@ -17,3 +17,5 @@ export const Signup = () => {
     </div>
   )
 }
+
+export default Signup
