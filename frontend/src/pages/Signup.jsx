@@ -1,8 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
-import Role from './components/Role'
-import SignupForm from './components/SignupForm'
-
+import Role from '../components/signup/Role'
+import SignupForm from '../components/signup/SignupForm'
 
 const Signup = () => {
   const [role, setRole] = useState('')
