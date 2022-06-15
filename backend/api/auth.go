@@ -10,12 +10,12 @@ import (
 
 type LoginSuccessResponse struct {
 	Username string `json:"username"`
-	Role	 string `json:"role"`
+	Role     string `json:"role"`
 	Token    string `json:"token"`
 }
 
 type RegisterSuccessResponse struct {
-	ID      int64  `json:"role_id"`
+	ID      int64  `json:"user_id"`
 	Status  string `json:"status"`
 	Message string `json:"message"`
 }
