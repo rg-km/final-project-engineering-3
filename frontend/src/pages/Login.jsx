@@ -4,7 +4,7 @@ import { BiShow, BiHide } from 'react-icons/bi'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import axiosClient from '../shared/config/axiosClient'
+import axiosClient from '../config/axiosClient'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
