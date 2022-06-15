@@ -45,22 +45,22 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		return
 	}
 
 	username, roleID, err := api.usersRepo.Login(creds.Username, creds.Password)
 	if err != nil {
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: "Login failed!"})
 		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: "Login failed!"})
 		return
 	}
 
 	roleName, err := api.usersRepo.FetchRoleByID(*roleID)
 	if err != nil {
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -103,15 +103,15 @@ func (api *API) register(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		return
 	}
 
 	id, err := api.usersRepo.Register(creds.Username, creds.Password, creds.Email, creds.Role)
 	if err != nil {
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
 		return
 	}
 
