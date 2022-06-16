@@ -71,6 +71,21 @@ func (u *UserRepository) FetchRoleByID(id int64) (*string, error) {
 	return &role, nil
 }
 
+func (u *UserRepository) FetchUserIdByUsername(username string) (*int64, error) {
+	var sqlStatement string
+	var id int64
+
+	sqlStatement = "SELECT id FROM user WHERE username = ?"
+
+	row := u.db.QueryRow(sqlStatement, username)
+	err := row.Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
+}
+
 func (u *UserRepository) Register(username, password, email string, role_id int64) (*int64, error) {
 	var sqlStatement string
 	var id int64
@@ -86,6 +101,20 @@ func (u *UserRepository) Register(username, password, email string, role_id int6
 	err = row.Scan(&id)
 	if err != nil {
 		return nil, err
+	}
+
+	if role_id == 2 {
+		sqlStatement = `INSERT INTO industry_profile (user_id) VALUES (?)`
+		_, err = u.db.Exec(sqlStatement, id)
+		if err != nil {
+			return nil, err
+		}
+	} else if role_id == 3 {
+		sqlStatement = `INSERT INTO researcher_profile (user_id) VALUES (?)`
+		_, err = u.db.Exec(sqlStatement, id)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &id, nil

@@ -36,8 +36,8 @@ func Migrate() (*sql.DB, error) {
 
 		CREATE TABLE IF NOT EXISTS admin_profile (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			name VARCHAR(255) NOT NULL,
-			user_id INTEGER NOT NULL,
+			name VARCHAR(255),
+			user_id INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (user_id) REFERENCES user (id)
@@ -45,13 +45,13 @@ func Migrate() (*sql.DB, error) {
 
 		CREATE TABLE IF NOT EXISTS industry_profile (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			name VARCHAR(255) NOT NULL,
-			address VARCHAR(255) NOT NULL,
-			description TEXT NOT NULL,
-			industry_category_id INTEGER NOT NULL,
-			num_of_employees INTEGER NOT NULL,
-			phone_number VARCHAR(255) NOT NULL,
-			logo VARCHAR(255) NOT NULL,
+			name VARCHAR(255),
+			address VARCHAR(255),
+			description TEXT,
+			industry_category_id INTEGER,
+			num_of_employees INTEGER,
+			phone_number VARCHAR(255),
+			logo VARCHAR(255),
 			user_id INTEGER NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -68,14 +68,14 @@ func Migrate() (*sql.DB, error) {
 
 		CREATE TABLE IF NOT EXISTS researcher_profile (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			team_name VARCHAR(255) NOT NULL,
-			leader_name VARCHAR(255) NOT NULL,
-			phone_number VARCHAR(255) NOT NULL,
-			nidn VARCHAR(255) NOT NULL,
-			collage_name VARCHAR(255) NOT NULL,
-			address VARCHAR(255) NOT NULL,
-			bank_account_num VARCHAR(255) NOT NULL,
-			bank_name VARCHAR(255) NOT NULL,
+			team_name VARCHAR(255),
+			leader_name VARCHAR(255),
+			phone_number VARCHAR(255),
+			nidn VARCHAR(255),
+			collage_name VARCHAR(255),
+			address VARCHAR(255),
+			bank_account_num VARCHAR(255),
+			bank_name VARCHAR(255),
 			user_id INTEGER NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -154,9 +154,6 @@ func Migrate() (*sql.DB, error) {
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
-
-		INSERT INTO user (username, password, email, role_id, is_logged_in) VALUES
-			('examplename', '$2a$14$RUJjJuC99z2LQe/1liXLYu2bp/C2zGizNlQmJAQfX2MeHim2pVTNW', 'name@example.com', 2, 0);
 
 		INSERT INTO role (name) VALUES
 			('admin'),
