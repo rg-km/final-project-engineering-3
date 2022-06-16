@@ -3,17 +3,13 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/rg-km/final-project-engineering-3/backend/repository"
 )
 
-type ResearcherProfileResponse struct {
+type ResearcherProfileSuccessResponse struct {
 	Status string `json:"status"`
-	Data   struct {
-		ID          int64  `json:"id"`
-		Name        string `json:"name"`
-		Address     string `json:"address"`
-		Description string `json:"description"`
-		Logo        string `json:"logo"`
-	} `json:"data"`
+	Data   *repository.ResearcherProfile `json:"data"`
 }
 
 type ResearcherProfileErrorResponse struct {
@@ -39,6 +35,10 @@ func (api *API) getResearcherProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	response := ResearcherProfileSuccessResponse{
+		Status: "success",
+		Data: researcherProfile,
+	}
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(researcherProfile)
+	json.NewEncoder(w).Encode(response)
 }
