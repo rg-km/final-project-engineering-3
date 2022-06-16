@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/rg-km/final-project-engineering-3/backend/repository"
@@ -54,8 +53,6 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		industryProfile.Logo,
 		*userId,
 	)
-
-	fmt.Println(profileData)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
