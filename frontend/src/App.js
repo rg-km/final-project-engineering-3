@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import MitraChallenges from './pages/MitraChallenges'
 import PostChallenge from './pages/PostChallenge'
 import RegistrantInformation from './pages/RegistrantInformation'
+import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
 
 function App() {
@@ -14,8 +15,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-challenge" element={<PostChallenge />} />
-        <Route path="/my-challenges" element={<MitraChallenges />} />
-        <Route path="/registrant-information" element={<RegistrantInformation />} />
+        <Route path="/posted-challenges">
+          <Route index element={<MitraChallenges />} />
+          <Route path=":challengeId">
+            <Route index element={<RegistrantList />} />
+            <Route path=":registrantId" element={<RegistrantInformation />} />
+          </Route>
+        </Route>
       </Routes>
     </div>
   )
