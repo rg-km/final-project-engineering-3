@@ -6,6 +6,10 @@ body {
   @apply bg-gray-300;
 }
 
+.App {
+  @apply pb-10;
+}
+
 .container {
-  @apply bg-white w-full md:w-4/5 lg:w-1/2 p-10 md:mt-5 mx-auto;
+  @apply bg-white w-full md:w-4/5 2xl:w-1/2 p-10 md:mt-5 mx-auto;
 }
