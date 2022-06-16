@@ -10,14 +10,16 @@ import (
 type API struct {
 	usersRepo            repository.UserRepository
 	industryProfilesRepo repository.IndustryProfileRepository
+	researcherProfileRepo repository.ResearcherProfileRepository
 	mux                  *http.ServeMux
 }
 
-func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository) API {
+func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository, researcherProfileRepo repository.ResearcherProfileRepository) API {
 	mux := http.NewServeMux()
 	api := API{
 		usersRepo,
 		industryProfilesRepo,
+		researcherProfileRepo,
 		mux,
 	}
 
@@ -29,6 +31,7 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 	mux.Handle("/industry/profile/edit", api.POST(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editIndustryProfile)))))
 
 	// API with AuthMiddleware and ResearcherMiddleware
+	mux.Handle("/researcher/profile", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProfile)))))
 
 	return api
 }

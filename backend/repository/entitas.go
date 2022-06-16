@@ -13,3 +13,15 @@ type IndustryProfile struct {
 	CreatedAt        string `json:"created_at"`
 	UpdatedAt        string `json:"updated_at"`
 }
+
+type ResearcherProfile struct {
+	Id                int64  `json:"id"`
+	TeamName          string `json:"team_name"`
+	LeaderName        string `json:"leader_name"`
+	PhoneNumber       string `json:"phone_number"`
+	NIDN              string `json:"nidn"`
+	CollegeName       string `json:"college_name"`
+	Address           string `json:"address"`
+	BankAccountNumber string `json:"bank_account_number"`
+	BankName          string `json:"bank_name"`
+}
