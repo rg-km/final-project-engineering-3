@@ -28,7 +28,7 @@ var _ = Describe("Authentication", func() {
 				if err != nil {
 					panic(err)
 				}
-				loginAPI := api.NewApi(*repository.NewUserRepository(db), *repository.NewIndustryProfileRepository(db))
+				loginAPI := api.NewApi(*repository.NewUserRepository(db), *repository.NewIndustryProfileRepository(db), *repository.NewResearcherProfileRepository(db))
 				loginAPI.Handler().ServeHTTP(wr, req)
 
 				Expect(wr.Code).To(Equal(200))
@@ -59,7 +59,7 @@ var _ = Describe("Authentication", func() {
 				if err != nil {
 					panic(err)
 				}
-				loginAPI := api.NewApi(*repository.NewUserRepository(db), *repository.NewIndustryProfileRepository(db))
+				loginAPI := api.NewApi(*repository.NewUserRepository(db), *repository.NewIndustryProfileRepository(db), *repository.NewResearcherProfileRepository(db))
 				loginAPI.Handler().ServeHTTP(wr, req)
 
 				Expect(wr.Code).To(Equal(401))
@@ -78,7 +78,7 @@ var _ = Describe("Authentication", func() {
 				if err != nil {
 					panic(err)
 				}
-				loginAPI := api.NewApi(*repository.NewUserRepository(db), *repository.NewIndustryProfileRepository(db))
+				loginAPI := api.NewApi(*repository.NewUserRepository(db), *repository.NewIndustryProfileRepository(db), *repository.NewResearcherProfileRepository(db))
 				loginAPI.Handler().ServeHTTP(wr, req)
 
 				Expect(wr.Code).To(Equal(401))

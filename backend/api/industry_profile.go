@@ -26,6 +26,7 @@ type IndustryProfileRequest struct {
 }
 
 func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
 	industryProfile := IndustryProfileRequest{}
 	err := json.NewDecoder(r.Body).Decode(&industryProfile)
 	if err != nil {
