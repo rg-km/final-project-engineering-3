@@ -2,16 +2,18 @@ import React from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
 import { BsDownload } from 'react-icons/bs'
 import { MdArrowBackIos } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Accordion from '../components/shared/Accordion'
 
 function RegistrantInformation() {
+  const navigate = useNavigate()
+
   return (
     <div className="container">
-      <Link to="#" className="flex items-center w-fit">
+      <button to="#" className="flex items-center w-fit" onClick={() => navigate(-1)}>
         <MdArrowBackIos fontSize={24} />
         <span className="text-xl">Kembali</span>
-      </Link>
+      </button>
 
       <div className="mt-10 grid lg:grid-cols-[1fr_2fr] gap-3">
         <div className="space-y-6">

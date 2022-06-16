@@ -15,7 +15,7 @@ function ChallengeCard() {
         <div className="text-xs md:text-sm">Periode</div>
       </div>
       <div className="hidden md:flex items-center justify-center">
-        <Link to="#">
+        <Link to="somethingId">
           <MdOutlineArrowForwardIos fontSize={48} />
         </Link>
       </div>
