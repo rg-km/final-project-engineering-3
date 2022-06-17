@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -83,5 +84,69 @@ func (api *API) postChallenge(w http.ResponseWriter, r *http.Request) {
 		Status:      "Success",
 		ChallengeId: *challengeId,
 		Message:     "Research Challenge Post Successful",
+	})
+}
+
+func (api *API) editChallenge(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	var challengeItem ChallengeItemRequest
+	challengeIdString, ok := r.URL.Query()["challenge_id"]
+	challengeId, _ := strconv.Atoi(challengeIdString[0])
+	if !ok || challengeId < 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Invalid URL Parameter",
+			Message: "challenge_id is required",
+		}})
+		return
+	}
+
+	challengeIsExist, _ := api.industryChallengeRepo.GetChallengeById(challengeId)
+	if !*challengeIsExist {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Not Found",
+			Message: "challenge_id is not exist",
+		}})
+		return
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&challengeItem)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Invalid JSON",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	var challengeIdAffected *int64
+	challengeIdAffected, err = api.industryChallengeRepo.EditChallenge(
+		challengeItem.Name,
+		challengeItem.Details,
+		challengeItem.ResearchCategory,
+		challengeItem.PeriodStart,
+		challengeItem.PeriodEnd,
+		challengeItem.MaxFunding,
+		challengeItem.GuideFile,
+		challengeItem.Quota,
+		challengeId,
+	)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(ChallengeSuccessResponse{
+		Status:      "Success",
+		ChallengeId: *challengeIdAffected,
+		Message:     "Research Challenge Edit Successful",
 	})
 }
