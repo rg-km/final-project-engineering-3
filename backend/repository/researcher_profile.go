@@ -10,6 +10,23 @@ func NewResearcherProfileRepository(db *sql.DB) *ResearcherProfileRepository {
 	return &ResearcherProfileRepository{db: db}
 }
 
+func (rpr *ResearcherProfileRepository) GetResearcherIdByUserId(userId int64) (*int64, error) {
+	var sqlStatement string
+	var researcherId int64
+
+	sqlStatement = `SELECT id FROM researcher_profile WHERE user_id = ?`
+
+	row := rpr.db.QueryRow(sqlStatement, userId)
+	err := row.Scan(
+		&researcherId,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &researcherId, nil
+}
+
 func (rpr *ResearcherProfileRepository) GetResearcherProfile(userId int64) (*ResearcherProfile, error) {
 	var sqlStatement string
 	var researcherProfile ResearcherProfile
