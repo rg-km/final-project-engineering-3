@@ -6,19 +6,19 @@ import (
 	"time"
 )
 
-type PostChallengeResponse struct {
+type ChallengeSuccessResponse struct {
 	Status      string `json:"status"`
 	ChallengeId int64  `json:"challenge_id"`
 	Message     string `json:"message"`
 }
 
-type PostChallengeErrorDetailResponse struct {
+type ChallengeErrorDetailResponse struct {
 	Name    string `json:"name"`
 	Message string `json:"message"`
 }
 
-type PostChallengeErrorResponse struct {
-	Error PostChallengeErrorDetailResponse `json:"error"`
+type ChallengeErrorResponse struct {
+	Error ChallengeErrorDetailResponse `json:"error"`
 }
 
 type ChallengeItemRequest struct {
@@ -39,7 +39,7 @@ func (api *API) postChallenge(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&challengeItem)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(PostChallengeErrorResponse{Error: PostChallengeErrorDetailResponse{
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
 			Name:    "Invalid JSON",
 			Message: err.Error(),
 		}})
@@ -50,7 +50,7 @@ func (api *API) postChallenge(w http.ResponseWriter, r *http.Request) {
 	userId, err = api.usersRepo.FetchUserIdByUsername(r.Context().Value("username").(string))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(PostChallengeErrorResponse{Error: PostChallengeErrorDetailResponse{
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
 			Name:    "Internal Server Error",
 			Message: err.Error(),
 		}})
@@ -71,7 +71,7 @@ func (api *API) postChallenge(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(PostChallengeErrorResponse{Error: PostChallengeErrorDetailResponse{
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
 			Name:    "Internal Server Error",
 			Message: err.Error(),
 		}})
@@ -79,7 +79,7 @@ func (api *API) postChallenge(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(PostChallengeResponse{
+	json.NewEncoder(w).Encode(ChallengeSuccessResponse{
 		Status:      "Success",
 		ChallengeId: *challengeId,
 		Message:     "Research Challenge Post Successful",
