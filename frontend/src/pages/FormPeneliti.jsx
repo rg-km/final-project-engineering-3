@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { AiOutlineUser } from 'react-icons/ai'
 import { useState } from 'react'
 
-const ChallangeList = () => {
+const FormPeneliti = () => {
   const [filename, setFilename] = useState('')
 
   const handleSubmit = (e) => {
@@ -94,4 +93,4 @@ const ChallangeList = () => {
 
 }
 
-export default ChallangeList
+export default FormPeneliti
