@@ -57,3 +57,33 @@ func (rpr *ResearchProposalRepository) GetResearcherProposals(userId int64) (*[]
 	}
 	return &researchProposals, nil
 }
+
+func (rpr *ResearchProposalRepository) ApplyResearchProposal(researcherId, challengeId int64) (int64, error) {
+	var sqlStatement string
+
+	sqlStatement = `INSERT INTO proposal (researcher_id, abstract, proposal_doc, other_doc) VALUES(?, ?, ?, ?)`
+
+	res, err := rpr.db.Exec(sqlStatement, researcherId, "", "", "")
+	if err != nil {
+		return 0, err
+	}
+
+	proposalId, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	sqlStatement = `
+	INSERT INTO research_proposal_review 
+		(research_item_id, proposal_id, funding_status_id, total_score)
+		VALUES (?, ?, ?, ?)
+	`
+
+	_, err = rpr.db.Exec(sqlStatement, challengeId, proposalId, 1, 0)
+	if err != nil {
+		_, _ = rpr.db.Exec("DELETE FROM proposal WHERE id = ?", proposalId)
+		return 0, err
+	}
+
+	return proposalId, nil
+}
