@@ -29,11 +29,26 @@ type ResearcherProfile struct {
 }
 
 type ResearchProposal struct {
-	Id				 int64     `json:"id"`
-	ChallengeName 	 string    `json:"challenge_name"`
-	PeriodStart   	 time.Time `json:"period_start"`
-	PeriodEnd		 time.Time `json:"period_end"`
-	IndustryName	 string    `json:"industry_name"`
+	Id               int64     `json:"id"`
+	ChallengeName    string    `json:"challenge_name"`
+	PeriodStart      time.Time `json:"period_start"`
+	PeriodEnd        time.Time `json:"period_end"`
+	IndustryName     string    `json:"industry_name"`
 	ResearchCategory string    `json:"research_category"`
-	FundingStatus	 string    `json:"funding_status"`
+	FundingStatus    string    `json:"funding_status"`
+}
+
+type ResearchChallengeItem struct {
+	Id               int64     `json:"id"`
+	Name             string    `json:"name"`
+	Details          string    `json:"details"`
+	ResearchCategory string    `json:"research_category"`
+	PeriodStart      time.Time `json:"period_start"`
+	PeriodEnd        time.Time `json:"period_end"`
+	MaxFunding       int64     `json:"max_funding"`
+	GuideFile        string    `json:"guide_file"`
+	Quota            int64     `json:"quota"`
+	IndustryName     string    `json:"industry_name"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
 }

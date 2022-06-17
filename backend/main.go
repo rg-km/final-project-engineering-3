@@ -19,7 +19,8 @@ func main() {
 	industryProfilesRepo := repository.NewIndustryProfileRepository(db)
 	researcherProfileRepo := repository.NewResearcherProfileRepository(db)
 	researchProposalRepo := repository.NewResearchProposalRepository(db)
+	industryChallengeRepo := repository.NewIndustryChallengeRepository(db)
 
-	mainAPI := api.NewApi(*usersRepo, *industryProfilesRepo, *researcherProfileRepo, *researchProposalRepo)
+	mainAPI := api.NewApi(*usersRepo, *industryProfilesRepo, *researcherProfileRepo, *researchProposalRepo, *industryChallengeRepo)
 	mainAPI.Start()
 }
