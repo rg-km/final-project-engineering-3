@@ -119,3 +119,25 @@ func (u *UserRepository) Register(username, password, email string, role_id int6
 
 	return &id, nil
 }
+
+func (u *UserRepository) Logout(userId int64) (*bool, error) {
+	var sqlStatement string
+	var returningId int64
+	isLoggedOut := false
+
+	sqlStatement = `
+		UPDATE user
+		SET is_logged_in = 0
+		WHERE id = ?
+		RETURNING id
+	`
+
+	res := u.db.QueryRow(sqlStatement, userId)
+	res.Scan(&returningId)
+
+	if returningId == userId {
+		isLoggedOut = true
+	}
+
+	return &isLoggedOut, nil
+}

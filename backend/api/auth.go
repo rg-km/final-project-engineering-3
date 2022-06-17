@@ -20,6 +20,11 @@ type RegisterSuccessResponse struct {
 	Message string `json:"message"`
 }
 
+type LogoutSuccessResponse struct {
+	Status  string `json:"status"`
+	Mesaage string `json:"message"`
+}
+
 type AuthErrorResponse struct {
 	Error string `json:"error"`
 }
@@ -122,4 +127,52 @@ func (api *API) register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(response)
+}
+
+func (api *API) logout(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(AuthErrorResponse{Error: "You are not logged in!"})
+			return
+		}
+
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	if cookie.Value == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	userId, err := api.usersRepo.FetchUserIdByUsername(r.Context().Value("username").(string))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	isLoggedOut, err := api.usersRepo.Logout(*userId)
+	if !*isLoggedOut {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:   "token",
+		Value:  "",
+		MaxAge: -1,
+	})
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LogoutSuccessResponse{
+		Status:  "success",
+		Mesaage: "Logout successful",
+	})
 }
