@@ -150,3 +150,44 @@ func (api *API) editChallenge(w http.ResponseWriter, r *http.Request) {
 		Message:     "Research Challenge Edit Successful",
 	})
 }
+
+func (api *API) deleteChallenge(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	challengeIdString, ok := r.URL.Query()["challenge_id"]
+	challengeId, _ := strconv.Atoi(challengeIdString[0])
+	if !ok || challengeId < 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Invalid URL Parameter",
+			Message: "challenge_id is required",
+		}})
+		return
+	}
+
+	challengeIsExist, _ := api.industryChallengeRepo.GetChallengeById(challengeId)
+	if !*challengeIsExist {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Not Found",
+			Message: "challenge_id is not exist",
+		}})
+		return
+	}
+
+	challengeIdAffected, err := api.industryChallengeRepo.DeleteChallenge(challengeId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(ChallengeSuccessResponse{
+		Status:      "Success",
+		ChallengeId: *challengeIdAffected,
+		Message:     "Research Challenge Delete Successful",
+	})
+}

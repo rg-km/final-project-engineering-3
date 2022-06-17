@@ -73,3 +73,22 @@ func (icr *IndustryChallengeRepository) EditChallenge(challengeName string, deta
 
 	return &lastIdAffected, nil
 }
+
+func (icr *IndustryChallengeRepository) DeleteChallenge(challengeId int) (*int64, error) {
+	var sqlStatement string
+	var lastIdAffected int64
+
+	sqlStatement = `
+		DELETE FROM research_item
+		WHERE id = ?
+		RETURNING id
+	`
+
+	res := icr.db.QueryRow(sqlStatement, challengeId)
+	err := res.Scan(&lastIdAffected)
+	if err != nil {
+		return nil, err
+	}
+
+	return &lastIdAffected, nil
+}
