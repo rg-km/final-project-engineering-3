@@ -8,7 +8,8 @@ import (
 )
 
 type EditSuccessResponse struct {
-	Success bool `json:"success"`
+	Status string                      `json:"status"`
+	Data   *repository.IndustryProfile `json:"data"`
 }
 
 type EditErrorResponse struct {
@@ -62,5 +63,8 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(profileData)
+	json.NewEncoder(w).Encode(EditSuccessResponse{
+		Status: "Success",
+		Data:   profileData,
+	})
 }

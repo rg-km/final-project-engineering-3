@@ -8,20 +8,22 @@ import (
 )
 
 type API struct {
-	usersRepo            repository.UserRepository
-	industryProfilesRepo repository.IndustryProfileRepository
+	usersRepo             repository.UserRepository
+	industryProfilesRepo  repository.IndustryProfileRepository
 	researcherProfileRepo repository.ResearcherProfileRepository
-	researchProposalRepo repository.ResearchProposalRepository
-	mux                  *http.ServeMux
+	researchProposalRepo  repository.ResearchProposalRepository
+	industryChallengeRepo repository.IndustryChallengeRepository
+	mux                   *http.ServeMux
 }
 
-func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository, researcherProfileRepo repository.ResearcherProfileRepository, researchProposalRepo repository.ResearchProposalRepository) API {
+func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository, researcherProfileRepo repository.ResearcherProfileRepository, researchProposalRepo repository.ResearchProposalRepository, industryChallengeRepo repository.IndustryChallengeRepository) API {
 	mux := http.NewServeMux()
 	api := API{
 		usersRepo,
 		industryProfilesRepo,
 		researcherProfileRepo,
 		researchProposalRepo,
+		industryChallengeRepo,
 		mux,
 	}
 
@@ -31,6 +33,9 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 	// API with AuthMiddleware and AdminMiddleware
 	// API with AuthMiddleware and IndustryMiddleware
 	mux.Handle("/industry/profile/edit", api.POST(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editIndustryProfile)))))
+	mux.Handle("/industry/challenge/post", api.POST(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.postChallenge)))))
+	mux.Handle("/industry/challenge/edit", api.PUT(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editChallenge)))))
+	mux.Handle("/industry/challenge/delete", api.DELETE(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.deleteChallenge)))))
 
 	// API with AuthMiddleware and ResearcherMiddleware
 	mux.Handle("/researcher/profile", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProfile)))))
