@@ -8,6 +8,7 @@ import PostChallenge from './pages/PostChallenge'
 import RegistrantInformation from './pages/RegistrantInformation'
 import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
+import ChallangeList from './pages/ChallangeList'
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Route index element={<MitraChallenges />} />
           <Route path=":challengeId">
             <Route index element={<RegistrantList />} />
-            <Route path=":registrantId" element={<RegistrantInformation />} />
+            <Route path=":regis trantId" element={<RegistrantInformation />} />
           </Route>
         </Route>
         <Route path="/mitra">
@@ -29,6 +30,8 @@ function App() {
           <Route path="profile" element={<MitraProfile />} />
         </Route>
       </Routes>
+
+
     </div>
   )
 }
