@@ -3,6 +3,7 @@ import TopBar from './components/shared/TopBar'
 import Login from './pages/Login'
 import MitraChallenges from './pages/MitraChallenges'
 import MitraInformation from './pages/MitraInformation'
+import MitraProfile from './pages/MitraProfile'
 import PostChallenge from './pages/PostChallenge'
 import RegistrantInformation from './pages/RegistrantInformation'
 import RegistrantList from './pages/RegistrantList'
@@ -25,6 +26,7 @@ function App() {
         </Route>
         <Route path="/mitra">
           <Route path="information" element={<MitraInformation />} />
+          <Route path="profile" element={<MitraProfile />} />
         </Route>
       </Routes>
     </div>
