@@ -30,6 +30,9 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 	mux.Handle("/login", api.POST(http.HandlerFunc(api.login)))
 	mux.Handle("/register", api.POST(http.HandlerFunc(api.register)))
 
+	// API with AuthMiddleware
+	mux.Handle("/logout", api.POST(api.AuthMiddleware(http.HandlerFunc(api.logout))))
+
 	// API with AuthMiddleware and AdminMiddleware
 	// API with AuthMiddleware and IndustryMiddleware
 	mux.Handle("/industry/profile/edit", api.POST(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editIndustryProfile)))))
