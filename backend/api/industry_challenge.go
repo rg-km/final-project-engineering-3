@@ -5,12 +5,19 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/rg-km/final-project-engineering-3/backend/repository"
 )
 
 type ChallengeSuccessResponse struct {
 	Status      string `json:"status"`
 	ChallengeId int64  `json:"challenge_id"`
 	Message     string `json:"message"`
+}
+
+type ChallengeDetailsResponse struct {
+	Status		string `json:"status"`
+	Data		*repository.ResearchChallengeItem `json:"data"`
 }
 
 type ChallengeErrorDetailResponse struct {
@@ -31,6 +38,57 @@ type ChallengeItemRequest struct {
 	MaxFunding       int64     `json:"max_funding"`
 	GuideFile        string    `json:"guide_file"`
 	Quota            int64     `json:"quota"`
+}
+
+func (api *API) getChallengeById(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	rawChallengeId := r.URL.Query().Get("challenge_id")
+	if rawChallengeId == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name: "Invalid URL Parameter",
+			Message: "challenge_id is required",
+		}})
+		return
+	}
+
+	challengeId, err := strconv.Atoi(rawChallengeId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name: "Internal Server Error",
+			Message: "internal server error",
+		}})
+		return
+	}
+
+	challengeIsExist, _ := api.industryChallengeRepo.CheckChallengeById(challengeId)
+	if !*challengeIsExist {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Not Found",
+			Message: "challenge_id is not exist",
+		}})
+		return
+	}
+
+	researchChallengeItem, err := api.industryChallengeRepo.GetChallengeById(challengeId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name: "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return	
+	}
+
+	response := ChallengeDetailsResponse{
+		Status: "success",
+		Data: researchChallengeItem,
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
 }
 
 func (api *API) postChallenge(w http.ResponseWriter, r *http.Request) {
@@ -102,7 +160,7 @@ func (api *API) editChallenge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	challengeIsExist, _ := api.industryChallengeRepo.GetChallengeById(challengeId)
+	challengeIsExist, _ := api.industryChallengeRepo.CheckChallengeById(challengeId)
 	if !*challengeIsExist {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
@@ -165,7 +223,7 @@ func (api *API) deleteChallenge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	challengeIsExist, _ := api.industryChallengeRepo.GetChallengeById(challengeId)
+	challengeIsExist, _ := api.industryChallengeRepo.CheckChallengeById(challengeId)
 	if !*challengeIsExist {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
