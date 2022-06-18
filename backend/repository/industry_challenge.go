@@ -14,7 +14,7 @@ func NewIndustryChallengeRepository(db *sql.DB) *IndustryChallengeRepository {
 }
 
 func (icr *IndustryChallengeRepository) GetChallengeById(challengeId int) (*ResearchChallengeItem, error) {
-	var sqlStatement string 
+	var sqlStatement string
 	var researchChallenge ResearchChallengeItem
 
 	sqlStatement = `
