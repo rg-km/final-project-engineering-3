@@ -60,6 +60,25 @@ func (rpr *ResearchProposalRepository) GetResearcherProposals(userId int64) (*[]
 	return &researchProposals, nil
 }
 
+func (rpr *ResearchProposalRepository) CheckResearchProposalExist(researcherId, challengeId int64) (bool) {
+	sqlStatement := `
+	SELECT 
+		rpv.id
+	FROM research_proposal_review rpv
+	INNER JOIN proposal p ON rpv.proposal_id = p.id
+	WHERE p.researcher_id = ?
+		AND rpv.research_item_id = ?
+	`
+
+	row := rpr.db.QueryRow(sqlStatement, researcherId, challengeId)
+	var itemId int
+	err := row.Scan(
+		&itemId,
+	)
+
+	return err == nil
+}
+
 func (rpr *ResearchProposalRepository) ApplyResearchProposal(researcherId, challengeId int64) (int64, error) {
 	var sqlStatement string
 
@@ -88,6 +107,22 @@ func (rpr *ResearchProposalRepository) ApplyResearchProposal(researcherId, chall
 	}
 
 	return proposalId, nil
+}
+
+func (rpr *ResearchProposalRepository) UploadProposalFiles(proposalId int, proposalFileLocation, optionalFileLocation, abstract string) (error) {
+	sqlStatement := `
+		UPDATE proposal
+		SET proposal_doc = ?, other_doc = ?, abstract = ?
+		WHERE id = ?
+		RETURNING id
+	`
+
+	_, err := rpr.db.Exec(sqlStatement, proposalFileLocation, optionalFileLocation, abstract, proposalId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (rpr *ResearchProposalRepository) GetProposalById(proposalId int64) (*Proposal, error) {
