@@ -59,3 +59,25 @@ type Challenger struct {
 	TeamName      string `json:"team_name"`
 	CollageName   string `json:"college_name"`
 }
+
+type FundingStatus struct {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
+type Proposal struct {
+	Id           int64  `json:"id"`
+	ResearcherId int64  `json:"researcher_id"`
+	Abstract     string `json:"abstract"`
+	ProposalDoc  string `json:"proposal_doc"`
+	OtherDoc     string `json:"other_doc"`
+	SubmitDate   string `json:"submit_date"`
+}
+
+type ResearchProposalReview struct {
+	Id              int64 `json:"id"`
+	ResearchItemId  int64 `json:"research_item_id"`
+	ProposalId      int64 `json:"proposal_id"`
+	FundingStatusId int64 `json:"funding_status_id"`
+	TotalFunding    int64 `json:"total_funding"`
+}
