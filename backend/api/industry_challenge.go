@@ -254,35 +254,3 @@ func (api *API) deleteChallenge(w http.ResponseWriter, r *http.Request) {
 		Message:     "Research Challenge Delete Successful",
 	})
 }
-
-func (api *API) getTheChallengers(w http.ResponseWriter, r *http.Request) {
-	api.AllowOrigin(w, r)
-	var listOfChallenger *[]repository.Challenger
-
-	challengeIdString, ok := r.URL.Query()["challenge_id"]
-	challengeId, _ := strconv.Atoi(challengeIdString[0])
-	if !ok || challengeId < 1 {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
-			Name:    "Invalid URL Parameter",
-			Message: "challenge_id is required",
-		}})
-		return
-	}
-
-	listOfChallenger, err := api.industryChallengeRepo.GetAllChallengers(challengeId)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
-			Name:    "Internal Server Error",
-			Message: err.Error(),
-		}})
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(ChallengersSuccessResponse{
-		Status:      "Success",
-		Challengers: *listOfChallenger,
-	})
-}
