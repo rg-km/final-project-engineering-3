@@ -1,6 +1,8 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type ResearchProposalRepository struct {
 	db *sql.DB
@@ -86,4 +88,37 @@ func (rpr *ResearchProposalRepository) ApplyResearchProposal(researcherId, chall
 	}
 
 	return proposalId, nil
+}
+
+func (rpr *ResearchProposalRepository) GetProposalById(proposalId int64) (*Proposal, error) {
+	var sqlStatement string
+	var proposal Proposal
+
+	sqlStatement = `
+		SELECT
+			id,
+			researcher_id,
+			abstract,
+			proposal_doc,
+			other_doc,
+			submit_date
+		FROM proposal
+		WHERE id = ?
+	`
+
+	row := rpr.db.QueryRow(sqlStatement, proposalId)
+	err := row.Scan(
+		&proposal.Id,
+		&proposal.ResearcherId,
+		&proposal.Abstract,
+		&proposal.ProposalDoc,
+		&proposal.OtherDoc,
+		&proposal.SubmitDate,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proposal, nil
 }
