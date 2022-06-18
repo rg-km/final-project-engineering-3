@@ -75,6 +75,13 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
 	}
 
+	profileId, err := api.industryProfilesRepo.GetIndustryIdByUserId(*userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		return
+	}
+
 	var profileData *repository.IndustryProfile
 	profileData, err = api.industryProfilesRepo.EditIndustryProfile(
 		industryProfile.Name,
@@ -84,7 +91,7 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		industryProfile.NumOfEmployees,
 		industryProfile.PhoneNumber,
 		industryProfile.Logo,
-		*userId,
+		*profileId,
 	)
 
 	if err != nil {
