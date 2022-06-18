@@ -11,6 +11,7 @@ type ResearcherProfileSuccessResponse struct {
 	Status  string                        `json:"status"`
 	Message string                        `json:"message"`
 	Data    *repository.ResearcherProfile `json:"data"`
+	ID      int64                         `json:"profile_id"`
 }
 
 type ResearcherProfileErrorResponse struct {
@@ -65,8 +66,8 @@ func (api *API) addResearcherProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// var profileId *int64
-	_, err = api.researcherProfileRepo.AddResearcherProfile(
+	var profileId *int64
+	profileId, err = api.researcherProfileRepo.AddResearcherProfile(
 		researcherProfile.TeamName,
 		researcherProfile.LeaderName,
 		researcherProfile.Phone,
@@ -87,6 +88,7 @@ func (api *API) addResearcherProfile(w http.ResponseWriter, r *http.Request) {
 	response := ResearcherProfileSuccessResponse{
 		Status:  "success",
 		Message: "Researcher profile added successfully",
+		ID:      *profileId,
 	}
 
 	w.WriteHeader(http.StatusOK)
