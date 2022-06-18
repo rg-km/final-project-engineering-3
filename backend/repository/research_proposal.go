@@ -1,6 +1,8 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type ResearchProposalRepository struct {
 	db *sql.DB
@@ -56,4 +58,102 @@ func (rpr *ResearchProposalRepository) GetResearcherProposals(userId int64) (*[]
 		researchProposals = append(researchProposals, researchProposal)
 	}
 	return &researchProposals, nil
+}
+
+func (rpr *ResearchProposalRepository) CheckResearchProposalExist(researcherId, challengeId int64) (bool) {
+	sqlStatement := `
+	SELECT 
+		rpv.id
+	FROM research_proposal_review rpv
+	INNER JOIN proposal p ON rpv.proposal_id = p.id
+	WHERE p.researcher_id = ?
+		AND rpv.research_item_id = ?
+	`
+
+	row := rpr.db.QueryRow(sqlStatement, researcherId, challengeId)
+	var itemId int
+	err := row.Scan(
+		&itemId,
+	)
+
+	return err == nil
+}
+
+func (rpr *ResearchProposalRepository) ApplyResearchProposal(researcherId, challengeId int64) (int64, error) {
+	var sqlStatement string
+
+	sqlStatement = `INSERT INTO proposal (researcher_id, abstract, proposal_doc, other_doc) VALUES(?, ?, ?, ?)`
+
+	res, err := rpr.db.Exec(sqlStatement, researcherId, "", "", "")
+	if err != nil {
+		return 0, err
+	}
+
+	proposalId, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	sqlStatement = `
+	INSERT INTO research_proposal_review 
+		(research_item_id, proposal_id, funding_status_id, total_score)
+		VALUES (?, ?, ?, ?)
+	`
+
+	_, err = rpr.db.Exec(sqlStatement, challengeId, proposalId, 1, 0)
+	if err != nil {
+		_, _ = rpr.db.Exec("DELETE FROM proposal WHERE id = ?", proposalId)
+		return 0, err
+	}
+
+	return proposalId, nil
+}
+
+func (rpr *ResearchProposalRepository) UploadProposalFiles(proposalId int, proposalFileLocation, optionalFileLocation, abstract string) (error) {
+	sqlStatement := `
+		UPDATE proposal
+		SET proposal_doc = ?, other_doc = ?, abstract = ?
+		WHERE id = ?
+		RETURNING id
+	`
+
+	_, err := rpr.db.Exec(sqlStatement, proposalFileLocation, optionalFileLocation, abstract, proposalId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (rpr *ResearchProposalRepository) GetProposalById(proposalId int64) (*Proposal, error) {
+	var sqlStatement string
+	var proposal Proposal
+
+	sqlStatement = `
+		SELECT
+			id,
+			researcher_id,
+			abstract,
+			proposal_doc,
+			other_doc,
+			submit_date
+		FROM proposal
+		WHERE id = ?
+	`
+
+	row := rpr.db.QueryRow(sqlStatement, proposalId)
+	err := row.Scan(
+		&proposal.Id,
+		&proposal.ResearcherId,
+		&proposal.Abstract,
+		&proposal.ProposalDoc,
+		&proposal.OtherDoc,
+		&proposal.SubmitDate,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proposal, nil
 }

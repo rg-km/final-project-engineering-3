@@ -26,6 +26,37 @@ type IndustryProfileRequest struct {
 	Logo               string `json:"logo"`
 }
 
+func (api *API) getIndustryProfile(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+	username := r.Context().Value("username")
+	var userId *int64
+	userId, err := api.usersRepo.FetchUserIdByUsername(username.(string))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+	}
+
+	profileId, err := api.industryProfilesRepo.GetIndustryIdByUserId(*userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		return
+	}
+
+	profileData, err := api.industryProfilesRepo.GetIndustryProfile(*profileId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(EditSuccessResponse{
+		Status: "Success",
+		Data:   profileData,
+	})
+}
+
 func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 	api.AllowOrigin(w, r)
 	industryProfile := IndustryProfileRequest{}
@@ -44,6 +75,13 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
 	}
 
+	profileId, err := api.industryProfilesRepo.GetIndustryIdByUserId(*userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		return
+	}
+
 	var profileData *repository.IndustryProfile
 	profileData, err = api.industryProfilesRepo.EditIndustryProfile(
 		industryProfile.Name,
@@ -53,7 +91,7 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		industryProfile.NumOfEmployees,
 		industryProfile.PhoneNumber,
 		industryProfile.Logo,
-		*userId,
+		*profileId,
 	)
 
 	if err != nil {

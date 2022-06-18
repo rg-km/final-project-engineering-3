@@ -13,10 +13,11 @@ type API struct {
 	researcherProfileRepo repository.ResearcherProfileRepository
 	researchProposalRepo  repository.ResearchProposalRepository
 	industryChallengeRepo repository.IndustryChallengeRepository
+	proposalReviewRepo    repository.ProposalReviewRepository
 	mux                   *http.ServeMux
 }
 
-func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository, researcherProfileRepo repository.ResearcherProfileRepository, researchProposalRepo repository.ResearchProposalRepository, industryChallengeRepo repository.IndustryChallengeRepository) API {
+func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository, researcherProfileRepo repository.ResearcherProfileRepository, researchProposalRepo repository.ResearchProposalRepository, industryChallengeRepo repository.IndustryChallengeRepository, proposalReviewRepo repository.ProposalReviewRepository) API {
 	mux := http.NewServeMux()
 	api := API{
 		usersRepo,
@@ -24,26 +25,34 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 		researcherProfileRepo,
 		researchProposalRepo,
 		industryChallengeRepo,
+		proposalReviewRepo,
 		mux,
 	}
 
 	mux.Handle("/login", api.POST(http.HandlerFunc(api.login)))
 	mux.Handle("/register", api.POST(http.HandlerFunc(api.register)))
 
+	mux.Handle("/research/details", api.GET(http.HandlerFunc(api.getChallengeById)))
+
 	// API with AuthMiddleware
 	mux.Handle("/logout", api.POST(api.AuthMiddleware(http.HandlerFunc(api.logout))))
 
 	// API with AuthMiddleware and AdminMiddleware
 	// API with AuthMiddleware and IndustryMiddleware
-	mux.Handle("/industry/profile/edit", api.POST(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editIndustryProfile)))))
+	mux.Handle("/industry/profile", api.GET(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.getIndustryProfile)))))
+	mux.Handle("/industry/profile/edit", api.PUT(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editIndustryProfile)))))
 	mux.Handle("/industry/challenge/post", api.POST(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.postChallenge)))))
 	mux.Handle("/industry/challenge/edit", api.PUT(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.editChallenge)))))
 	mux.Handle("/industry/challenge/delete", api.DELETE(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.deleteChallenge)))))
+	mux.Handle("/industry/challenge/review/challengers", api.GET(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.getTheChallengers)))))
+	mux.Handle("/industry/challenge/review/details/", api.GET(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.getReviewrReviewDetails)))))
 
 	// API with AuthMiddleware and ResearcherMiddleware
 	mux.Handle("/researcher/profile", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProfile)))))
 	mux.Handle("/researcher/profile/add", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.addResearcherProfile)))))
 	mux.Handle("/researcher/proposal", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProposalStatus)))))
+	mux.Handle("/researcher/challenge/apply", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.applyResearchProposal)))))
+	mux.Handle("/researcher/challenge/upload", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.uploadFiles)))))
 
 	return api
 }
