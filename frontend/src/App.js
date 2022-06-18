@@ -10,7 +10,9 @@ import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
 import FormPeneliti from './pages/FormPeneliti'
 import ChallangeList from './pages/ChallangeList'
-
+import ApplyChallange from './pages/ApplyChallange'
+import DataCheck from './pages/DataCheck'
+import UploadBerkas from './pages/UploadBerkas'
 
 function App() {
   return (
@@ -32,8 +34,6 @@ function App() {
           <Route path="profile" element={<MitraProfile />} />
         </Route>
       </Routes>
-      <ChallangeList/>
-
     </div>
   )
 }
