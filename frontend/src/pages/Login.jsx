@@ -2,24 +2,29 @@ import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { BiShow, BiHide } from 'react-icons/bi'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import axiosClient from '../config/axiosClient'
+import useUserStore from '../store/useUserStore'
+import { useEffect } from 'react'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = async () => {
-    try {
-      const { data } = await axiosClient.post('/login', { username, password })
-      console.log('Login berhasil', data)
-    } catch (err) {
-      console.error(err)
-      console.log('Login gagal')
+  const login = useUserStore((state) => state.login)
+  const user = useUserStore((state) => state.user)
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'industry') {
+        navigate('/posted-challenges')
+      } else {
+        navigate('/challenges')
+      }
     }
-  }
+  }, [user, navigate])
   return (
     <div className="flex justify-center">
       <div className="bg-white p-8 md:p-10 mt-10 w-4/5 md:w-2/5 2xl:w-1/4">
@@ -58,7 +63,10 @@ function Login() {
             </button>
           </div>
           <div>
-            <button className="w-full py-3 bg-black rounded-full text-white" onClick={handleLogin}>
+            <button
+              className="w-full py-3 bg-black rounded-full text-white"
+              onClick={() => login({ username, password })}
+            >
               Masuk
             </button>
           </div>
