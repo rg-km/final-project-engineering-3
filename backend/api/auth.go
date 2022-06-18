@@ -91,6 +91,10 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		Name:    "token",
 		Value:   tokenString,
 		Expires: tokenExpirationTime,
+		// Path: "/",
+		// HttpOnly: false,
+		// SameSite: http.SameSiteNoneMode,
+		// Secure: true,
 	})
 
 	response := LoginSuccessResponse{
