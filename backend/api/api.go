@@ -54,6 +54,7 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 	mux.Handle("/researcher/chalange/list", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherChallenges)))))
 	mux.Handle("/researcher/challenge/apply", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.applyResearchProposal)))))
 	mux.Handle("/researcher/challenge/upload", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.uploadFiles)))))
+	mux.Handle("/researcher/challenge/details", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getChallengeById)))))
 
 	return api
 }
