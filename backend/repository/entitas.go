@@ -52,3 +52,10 @@ type ResearchChallengeItem struct {
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
 }
+
+type Challenger struct {
+	Id            int64  `json:"review_id"`
+	FundingStatus string `json:"funding_status"`
+	TeamName      string `json:"team_name"`
+	CollageName   string `json:"college_name"`
+}

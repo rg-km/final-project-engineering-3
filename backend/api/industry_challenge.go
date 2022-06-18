@@ -16,8 +16,8 @@ type ChallengeSuccessResponse struct {
 }
 
 type ChallengeDetailsResponse struct {
-	Status		string `json:"status"`
-	Data		*repository.ResearchChallengeItem `json:"data"`
+	Status string                            `json:"status"`
+	Data   *repository.ResearchChallengeItem `json:"data"`
 }
 
 type ChallengeErrorDetailResponse struct {
@@ -40,6 +40,11 @@ type ChallengeItemRequest struct {
 	Quota            int64     `json:"quota"`
 }
 
+type ChallengersSuccessResponse struct {
+	Status      string                  `json:"status"`
+	Challengers []repository.Challenger `json:"challengers"`
+}
+
 func (api *API) getChallengeById(w http.ResponseWriter, r *http.Request) {
 	api.AllowOrigin(w, r)
 
@@ -47,7 +52,7 @@ func (api *API) getChallengeById(w http.ResponseWriter, r *http.Request) {
 	if rawChallengeId == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
-			Name: "Invalid URL Parameter",
+			Name:    "Invalid URL Parameter",
 			Message: "challenge_id is required",
 		}})
 		return
@@ -57,7 +62,7 @@ func (api *API) getChallengeById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
-			Name: "Internal Server Error",
+			Name:    "Internal Server Error",
 			Message: "internal server error",
 		}})
 		return
@@ -77,15 +82,15 @@ func (api *API) getChallengeById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
-			Name: "Internal Server Error",
+			Name:    "Internal Server Error",
 			Message: err.Error(),
 		}})
-		return	
+		return
 	}
 
 	response := ChallengeDetailsResponse{
 		Status: "success",
-		Data: researchChallengeItem,
+		Data:   researchChallengeItem,
 	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
@@ -247,5 +252,37 @@ func (api *API) deleteChallenge(w http.ResponseWriter, r *http.Request) {
 		Status:      "Success",
 		ChallengeId: *challengeIdAffected,
 		Message:     "Research Challenge Delete Successful",
+	})
+}
+
+func (api *API) getTheChallengers(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+	var listOfChallenger *[]repository.Challenger
+
+	challengeIdString, ok := r.URL.Query()["challenge_id"]
+	challengeId, _ := strconv.Atoi(challengeIdString[0])
+	if !ok || challengeId < 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Invalid URL Parameter",
+			Message: "challenge_id is required",
+		}})
+		return
+	}
+
+	listOfChallenger, err := api.industryChallengeRepo.GetAllChallengers(challengeId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(ChallengersSuccessResponse{
+		Status:      "Success",
+		Challengers: *listOfChallenger,
 	})
 }
