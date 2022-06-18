@@ -112,6 +112,16 @@ func (api *API) applyResearchProposal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	isProposalExist := api.researchProposalRepo.CheckResearchProposalExist(*researcherId, int64(challengeId))
+	if isProposalExist {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Proposal Already Exists",
+			Message: "can't apply to the same challenge more than once",
+		}})
+		return
+	}
+
 	proposalId, err := api.researchProposalRepo.ApplyResearchProposal(*researcherId, int64(challengeId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
