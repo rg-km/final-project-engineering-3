@@ -11,6 +11,7 @@ import RegistrantInformation from './pages/RegistrantInformation'
 import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
 import useUserStore from './store/useUserStore'
+import ChallangeList from './pages/ChallangeList'
 
 function App() {
   const getUserData = useUserStore.getState().getUserData

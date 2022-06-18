@@ -34,6 +34,7 @@ var _ = Describe("Authentication", func() {
 					*repository.NewResearcherProfileRepository(db),
 					*repository.NewResearchProposalRepository(db),
 					*repository.NewIndustryChallengeRepository(db),
+					*repository.NewProposalReviewRepository(db),
 				)
 				loginAPI.Handler().ServeHTTP(wr, req)
 
@@ -71,6 +72,7 @@ var _ = Describe("Authentication", func() {
 					*repository.NewResearcherProfileRepository(db),
 					*repository.NewResearchProposalRepository(db),
 					*repository.NewIndustryChallengeRepository(db),
+					*repository.NewProposalReviewRepository(db),
 				)
 				loginAPI.Handler().ServeHTTP(wr, req)
 
@@ -96,6 +98,7 @@ var _ = Describe("Authentication", func() {
 					*repository.NewResearcherProfileRepository(db),
 					*repository.NewResearchProposalRepository(db),
 					*repository.NewIndustryChallengeRepository(db),
+					*repository.NewProposalReviewRepository(db),
 				)
 				loginAPI.Handler().ServeHTTP(wr, req)
 
