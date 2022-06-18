@@ -87,3 +87,19 @@ func (rpr *ResearchProposalRepository) ApplyResearchProposal(researcherId, chall
 
 	return proposalId, nil
 }
+
+func (rpr *ResearchProposalRepository) UploadProposalFiles(proposalId int, proposalFileLocation, optionalFileLocation, abstract string) (error) {
+	sqlStatement := `
+		UPDATE proposal
+		SET proposal_doc = ?, other_doc = ?, abstract = ?
+		WHERE id = ?
+		RETURNING id
+	`
+
+	_, err := rpr.db.Exec(sqlStatement, proposalFileLocation, optionalFileLocation, abstract, proposalId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
