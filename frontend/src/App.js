@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <TopBar />
-      {/* <Routes>
+      <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-challenge" element={<PostChallenge />} />
@@ -32,9 +32,8 @@ function App() {
           <Route path="profile" element={<MitraProfile />} />
         </Route>
       </Routes>
-      <ChallangeList/> */}
 
-      <PengajuanProposal/>
+
     </div>
   )
 }
