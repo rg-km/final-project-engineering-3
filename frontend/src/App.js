@@ -36,8 +36,6 @@ function App() {
           <Route path="profile" element={<MitraProfile />} />
         </Route>
       </Routes>
-
-
     </div>
   )
 }
