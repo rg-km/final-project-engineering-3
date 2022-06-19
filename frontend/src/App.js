@@ -10,13 +10,13 @@ import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
 import FormPeneliti from './pages/FormPeneliti'
 import ChallangeList from './pages/ChallangeList'
-
+import PengajuanProposal from './pages/PengajuanProposal'
 
 function App() {
   return (
     <div className="App">
       <TopBar />
-      <Routes>
+      {/* <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-challenge" element={<PostChallenge />} />
@@ -32,8 +32,9 @@ function App() {
           <Route path="profile" element={<MitraProfile />} />
         </Route>
       </Routes>
-      <ChallangeList/>
+      <ChallangeList/> */}
 
+      <PengajuanProposal/>
     </div>
   )
 }
