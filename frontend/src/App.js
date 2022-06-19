@@ -13,6 +13,8 @@ import ChallangeList from './pages/ChallangeList'
 import ApplyChallange from './pages/ApplyChallange'
 import DataCheck from './pages/DataCheck'
 import UploadBerkas from './pages/UploadBerkas'
+import PengajuanProposal from './pages/PengajuanProposal'
+
 
 function App() {
   return (
