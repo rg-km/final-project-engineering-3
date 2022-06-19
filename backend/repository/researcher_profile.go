@@ -65,6 +65,37 @@ func (rpr *ResearcherProfileRepository) GetResearcherProfile(userId int64) (*Res
 	return &researcherProfile, nil
 }
 
+func (rpr *ResearcherProfileRepository) AddResearcherProfile(teamName string, leaderName string, phoneNumber string, nidn string, collageName string, address string, bankAccountNumber string, bankName string, userId int64) (*int64, error) {
+	var sqlStatement string
+	var lastId int64
+
+	sqlStatement = `
+		INSERT INTO researcher_profile (
+			team_name,
+			leader_name,
+			phone_number,
+			nidn,
+			collage_name,
+			address,
+			bank_account_num,
+			bank_name,
+			user_id
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`
+
+	res, err := rpr.db.Exec(sqlStatement, teamName, leaderName, phoneNumber, nidn, collageName, address, bankAccountNumber, bankName, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	lastId, err = res.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	return &lastId, nil
+}
+
 func (rpr *ResearcherProfileRepository) GetResearcherProfileById(profileId int64) (*ResearcherProfile, error) {
 	var sqlStatement string
 	var researcherProfile ResearcherProfile

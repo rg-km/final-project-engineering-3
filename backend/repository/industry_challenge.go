@@ -135,3 +135,54 @@ func (icr *IndustryChallengeRepository) DeleteChallenge(challengeId int) (*int64
 
 	return &lastIdAffected, nil
 }
+
+func (icr *IndustryChallengeRepository) GetAllChallenges() ([]ResearchChallengeItem, error) {
+	var sqlStatement string
+	var researchChallenges []ResearchChallengeItem
+
+	sqlStatement = `
+		SELECT 
+			ri.id,
+			ri.name,
+			ri.details,
+			rc.name,
+			ri.period_start,
+			ri.period_end,
+			ri.max_funding,
+			ri.guide_file,
+			ri.quota,
+			ip.name
+		FROM research_item ri
+		INNER JOIN research_category rc ON ri.research_category_id = rc.id
+		INNER JOIN industry_profile ip ON ri.industry_id = ip.id
+	`
+
+	rows, err := icr.db.Query(sqlStatement)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var researchChallenge ResearchChallengeItem
+
+		err := rows.Scan(
+			&researchChallenge.Id,
+			&researchChallenge.Name,
+			&researchChallenge.Details,
+			&researchChallenge.ResearchCategory,
+			&researchChallenge.PeriodStart,
+			&researchChallenge.PeriodEnd,
+			&researchChallenge.MaxFunding,
+			&researchChallenge.GuideFile,
+			&researchChallenge.Quota,
+			&researchChallenge.IndustryName,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		researchChallenges = append(researchChallenges, researchChallenge)
+	}
+
+	return researchChallenges, nil
+}

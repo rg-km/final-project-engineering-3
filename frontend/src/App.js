@@ -11,6 +11,12 @@ import RegistrantInformation from './pages/RegistrantInformation'
 import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
 import useUserStore from './store/useUserStore'
+import FormPeneliti from './pages/FormPeneliti'
+import ChallangeList from './pages/ChallangeList'
+import ApplyChallange from './pages/ApplyChallange'
+import DataCheck from './pages/DataCheck'
+import UploadBerkas from './pages/UploadBerkas'
+import PengajuanProposal from './pages/PengajuanProposal'
 
 function App() {
   const getUserData = useUserStore.getState().getUserData
