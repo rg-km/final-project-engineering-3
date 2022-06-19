@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import useUserStore from '../store/useUserStore'
 import { useEffect } from 'react'
+import useUserErrorMessage from '../hooks/useUserErrorMessage'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
@@ -15,6 +16,7 @@ function Login() {
 
   const login = useUserStore((state) => state.login)
   const user = useUserStore((state) => state.user)
+  const errorMessage = useUserErrorMessage()
 
   useEffect(() => {
     if (user) {
@@ -25,6 +27,7 @@ function Login() {
       }
     }
   }, [user, navigate])
+
   return (
     <div className="flex justify-center">
       <div className="bg-white p-8 md:p-10 mt-10 w-4/5 md:w-2/5 2xl:w-1/4">
@@ -55,6 +58,9 @@ function Login() {
                 Lupa Password
               </a>
             </div>
+
+            {errorMessage && <div className="text-red-500 italic text-sm">{errorMessage}</div>}
+
             <button
               className="absolute right-0 bottom-8 p-3"
               onClick={() => setShowPassword(!showPassword)}

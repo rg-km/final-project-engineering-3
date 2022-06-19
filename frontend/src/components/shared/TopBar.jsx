@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useUserStore from '../../store/useUserStore'
 import MitraNavigation from '../navigation/MitraNavigation'
 
@@ -21,7 +21,7 @@ function TopBar() {
   return (
     <div className="w-full bg-black p-6 flex justify-end items-center space-x-5">
       <div className="flex space-x-5  ">
-        {user.role === 'industry' ? <MitraNavigation /> : null}
+        {user?.role === 'industry' ? <MitraNavigation /> : null}
       </div>
       <div className="relative">
         <button
