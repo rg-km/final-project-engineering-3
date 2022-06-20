@@ -14,8 +14,8 @@ import ChallengeInfo from './pages/ChallengeInfo'
 import ChallangeList from './pages/ChallangeList'
 import PengajuanProposal from './pages/PengajuanProposal'
 import HomePage from './pages/HomePage'
-import RoleLayout from './pages/RoleLayout'
-
+import ProtectedRoute from './pages/ProtectedRoute'
+import PublicRoute from './pages/PublicRoute'
 
 function App() {
   const getUserData = useUserStore.getState().getUserData
@@ -28,11 +28,24 @@ function App() {
     <div className="App">
       <TopBar />
       <Routes>
-
-        <Route path="/" element={<HomePage />}/>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route element={<RoleLayout role="industry" />}>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
+        <Route element={<ProtectedRoute role="industry" />}>
           <Route path="/add-challenge" element={<PostChallenge />} />
           <Route path="/posted-challenges">
             <Route index element={<MitraChallenges />} />
@@ -46,7 +59,7 @@ function App() {
             <Route path="profile" element={<MitraProfile />} />
           </Route>
         </Route>
-        <Route element={<RoleLayout role="researcher" />}>
+        <Route element={<ProtectedRoute role="researcher" />}>
           <Route path="/challenges">
             <Route index element={<ChallangeList />} />
             <Route path=":challengeId">

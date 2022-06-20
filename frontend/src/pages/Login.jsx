@@ -1,32 +1,18 @@
-import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { BiShow, BiHide } from 'react-icons/bi'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import useUserStore from '../store/useUserStore'
-import { useEffect } from 'react'
 import useUserErrorMessage from '../hooks/useUserErrorMessage'
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const login = useUserStore((state) => state.login)
-  const user = useUserStore((state) => state.user)
   const errorMessage = useUserErrorMessage()
-
-  useEffect(() => {
-    if (user) {
-      if (user.role === 'industry') {
-        navigate('/posted-challenges')
-      } else {
-        navigate('/challenges')
-      }
-    }
-  }, [user, navigate])
 
   return (
     <div className="flex justify-center">
