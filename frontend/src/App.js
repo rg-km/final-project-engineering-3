@@ -14,13 +14,14 @@ import ApplyChallange from './pages/ApplyChallange'
 import DataCheck from './pages/DataCheck'
 import UploadBerkas from './pages/UploadBerkas'
 import PengajuanProposal from './pages/PengajuanProposal'
-
+import HomePage from './pages/HomePage'
 
 function App() {
   return (
     <div className="App">
       <TopBar />
       <Routes>
+        <Route path="/" element={<HomePage />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/add-challenge" element={<PostChallenge />} />
