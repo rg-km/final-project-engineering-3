@@ -8,8 +8,6 @@ function MitraInformation() {
 
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
-
-    console.log(data)
   }
   return (
     <div className="container">

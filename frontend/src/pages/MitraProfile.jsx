@@ -48,7 +48,7 @@ function MitraProfile() {
               </Accordion>
             </div>
             <div className="py-2">
-              <div className="text-xl font-semibold">Bidang / Kategoru</div>
+              <div className="text-xl font-semibold">Bidang / Kategori</div>
               <div className="text-gray-500">PT. AA</div>
             </div>
             <div className="py-2">
