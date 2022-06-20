@@ -4,19 +4,16 @@ import TopBar from './components/shared/TopBar'
 import Login from './pages/Login'
 import MitraChallenges from './pages/MitraChallenges'
 import MitraInformation from './pages/MitraInformation'
-import MitraLayout from './pages/MitraLayout'
 import MitraProfile from './pages/MitraProfile'
 import PostChallenge from './pages/PostChallenge'
 import RegistrantInformation from './pages/RegistrantInformation'
 import RegistrantList from './pages/RegistrantList'
 import Signup from './pages/Signup'
 import useUserStore from './store/useUserStore'
-import FormPeneliti from './pages/FormPeneliti'
+import ChallengeInfo from './pages/ChallengeInfo'
 import ChallangeList from './pages/ChallangeList'
-import ApplyChallange from './pages/ApplyChallange'
-import DataCheck from './pages/DataCheck'
-import UploadBerkas from './pages/UploadBerkas'
 import PengajuanProposal from './pages/PengajuanProposal'
+import RoleLayout from './pages/RoleLayout'
 
 function App() {
   const getUserData = useUserStore.getState().getUserData
@@ -29,61 +26,31 @@ function App() {
     <div className="App">
       <TopBar />
       <Routes>
+        <Route path="/" element={<p>Home Page</p>} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/add-challenge"
-          element={
-            <MitraLayout>
-              <PostChallenge />
-            </MitraLayout>
-          }
-        />
-        <Route path="/posted-challenges">
-          <Route
-            index
-            element={
-              <MitraLayout>
-                <MitraChallenges />
-              </MitraLayout>
-            }
-          />
-          <Route path=":challengeId">
-            <Route
-              index
-              element={
-                <MitraLayout>
-                  <RegistrantList />
-                </MitraLayout>
-              }
-            />
-            <Route
-              path=":registrantId"
-              element={
-                <MitraLayout>
-                  <RegistrantInformation />
-                </MitraLayout>
-              }
-            />
+        <Route element={<RoleLayout role="industry" />}>
+          <Route path="/add-challenge" element={<PostChallenge />} />
+          <Route path="/posted-challenges">
+            <Route index element={<MitraChallenges />} />
+            <Route path=":challengeId">
+              <Route index element={<RegistrantList />} />
+              <Route path=":registrantId" element={<RegistrantInformation />} />
+            </Route>
+          </Route>
+          <Route path="/mitra">
+            <Route path="information" element={<MitraInformation />} />
+            <Route path="profile" element={<MitraProfile />} />
           </Route>
         </Route>
-        <Route path="/mitra">
-          <Route
-            path="information"
-            element={
-              <MitraLayout>
-                <MitraInformation />
-              </MitraLayout>
-            }
-          />
-          <Route
-            path="profile"
-            element={
-              <MitraLayout>
-                <MitraProfile />
-              </MitraLayout>
-            }
-          />
+        <Route element={<RoleLayout role="researcher" />}>
+          <Route path="/challenges">
+            <Route index element={<ChallangeList />} />
+            <Route path=":challengeId">
+              <Route index element={<ChallengeInfo />} />
+            </Route>
+          </Route>
+          <Route path="/proposal-status" element={<PengajuanProposal />} />
         </Route>
       </Routes>
     </div>

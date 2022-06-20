@@ -6,7 +6,6 @@ const useUserErrorMessage = () => {
   const resetErrorMessage = useUserStore((state) => state.resetErrorMessage)
 
   useEffect(() => {
-    console.log('errorMessage')
     return () => {
       resetErrorMessage()
     }

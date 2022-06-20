@@ -6,6 +6,7 @@ import MitraNavigation from '../navigation/MitraNavigation'
 
 function TopBar() {
   const user = useUserStore((state) => state.user)
+  const logout = useUserStore((state) => state.logout)
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
 
@@ -37,7 +38,9 @@ function TopBar() {
             <button onClick={handleNavigate} className="px-10 py-2 hover:bg-gray-100">
               Profile
             </button>
-            <button className="px-10 py-2 hover:bg-gray-100 mt-2">Logout</button>
+            <button className="px-10 py-2 hover:bg-gray-100 mt-2" onClick={logout}>
+              Logout
+            </button>
           </div>
         )}
       </div>
