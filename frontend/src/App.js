@@ -13,7 +13,9 @@ import useUserStore from './store/useUserStore'
 import ChallengeInfo from './pages/ChallengeInfo'
 import ChallangeList from './pages/ChallangeList'
 import PengajuanProposal from './pages/PengajuanProposal'
+import HomePage from './pages/HomePage'
 import RoleLayout from './pages/RoleLayout'
+
 
 function App() {
   const getUserData = useUserStore.getState().getUserData
@@ -26,7 +28,8 @@ function App() {
     <div className="App">
       <TopBar />
       <Routes>
-        <Route path="/" element={<p>Home Page</p>} />
+
+        <Route path="/" element={<HomePage />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route element={<RoleLayout role="industry" />}>
