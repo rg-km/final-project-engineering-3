@@ -12,6 +12,7 @@ type LoginSuccessResponse struct {
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	Token    string `json:"token"`
+	IsDataComplete bool `json:"isDataComplete"`
 }
 
 type RegisterSuccessResponse struct {
@@ -62,6 +63,21 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userId, err := api.usersRepo.FetchUserIdByUsername(*username)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	isDataComplete, err := api.checkUserDataComplete(*roleID, *userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+
 	roleName, err := api.usersRepo.FetchRoleByID(*roleID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -101,6 +117,7 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		Username: *username,
 		Role:     *roleName,
 		Token:    tokenString,
+		IsDataComplete: isDataComplete,
 	}
 
 	json.NewEncoder(w).Encode(response)
@@ -179,4 +196,36 @@ func (api *API) logout(w http.ResponseWriter, r *http.Request) {
 		Status:  "success",
 		Mesaage: "Logout successful",
 	})
+}
+
+func (api *API) checkUserDataComplete(roleID, userId int64) (bool, error) {
+	if roleID == 2 {
+		industryId, err := api.industryProfilesRepo.GetIndustryIdByUserId(userId)
+		if err != nil {
+			return false, err
+		}
+
+		industryProfile, err := api.industryProfilesRepo.GetIndustryProfile(*industryId)
+		if err != nil {
+			return false, err
+		}
+
+		if industryProfile.Name == "" || industryProfile.Description == "" || industryProfile.Address == "" || industryProfile.IndustryCategory == "" || industryProfile.PhoneNumber == "" {
+			return false, nil	
+		} else {
+			return true, nil
+		}
+	} else if roleID == 3 {
+		researcherProfile, err := api.researcherProfileRepo.GetResearcherProfile(userId)
+		if err != nil {
+			return false, err
+		}
+
+		if researcherProfile.TeamName == "" || researcherProfile.LeaderName == "" || researcherProfile.PhoneNumber == "" || researcherProfile.NIDN == "" || researcherProfile.CollegeName == "" || researcherProfile.Address == "" {
+			return false, nil
+		} else {
+			return true, nil
+		}
+	}
+	return false, nil
 }
