@@ -141,3 +141,20 @@ func (u *UserRepository) Logout(userId int64) (*bool, error) {
 
 	return &isLoggedOut, nil
 }
+
+func (u *UserRepository) CheckUsernameAndEmail(username, email string) (bool) {
+	var sqlStatement string
+	var userId int64
+
+	sqlStatement = `
+		SELECT id
+		FROM user
+		WHERE username = ?
+		OR email = ?
+	`
+
+	res := u.db.QueryRow(sqlStatement, username, email)
+	res.Scan(&userId)
+
+	return userId > 0
+}

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -39,10 +40,10 @@ type Claims struct {
 }
 
 type Credentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-	Role     int64  `json:"role_id"`
+	Username string `json:"username" valid:"required"`
+	Password string `json:"password" valid:"required"`
+	Email    string `json:"email" valid:"required,email"`
+	Role     int64  `json:"role_id" valid:"required,numeric"`
 }
 
 func (api *API) login(w http.ResponseWriter, r *http.Request) {
@@ -117,6 +118,8 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+
+
 func (api *API) register(w http.ResponseWriter, r *http.Request) {
 	api.AllowOrigin(w, r)
 	var creds Credentials
@@ -125,6 +128,26 @@ func (api *API) register(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	sanitizeInputResult := api.sanitizeCredential(creds)
+	if sanitizeInputResult != "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: sanitizeInputResult})
+		return
+	}
+
+	isUsernameOrEmailExist := api.usersRepo.CheckUsernameAndEmail(creds.Username, creds.Email)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
+		return
+	}
+
+	if isUsernameOrEmailExist {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(AuthErrorResponse{Error: "Username or email already exist!"})
 		return
 	}
 
@@ -222,4 +245,29 @@ func (api *API) checkUserDataComplete(roleID, userId int64) (bool) {
 		}
 	}
 	return false
+}
+
+func (api *API) sanitizeCredential(creds Credentials) string {
+	_ , err := govalidator.ValidateStruct(creds)
+
+	if err != nil {
+		return err.Error()
+	}
+
+	result := govalidator.HasUpperCase(creds.Password)
+	if !result {
+		return "Password must contain at least one uppercase letter"
+	}
+
+	result = govalidator.MinStringLength(creds.Password, "8")
+	if !result {
+		return "Password must be at least 8 characters long"
+	}
+
+	result = govalidator.StringLength(creds.Username, "3", "20")
+	if !result {
+		return "Username must be between 3 and 20 characters long"
+	}
+
+	return ""
 }
