@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 import Role from '../components/signup/Role'
 import SignupForm from '../components/signup/SignupForm'
