@@ -28,7 +28,7 @@ const useUserStore = create(
         } catch (err) {
           console.error(err)
           set((state) => {
-            state.errorMessage = 'Login gagal!'
+            state.errorMessage = 'Username / password salah!'
             state.isLoading = false
           })
         }

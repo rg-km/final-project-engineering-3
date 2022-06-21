@@ -1,19 +1,10 @@
 import axios from 'axios'
 
-const url = 'http://localhost:8080/'
+const url = 'http://api.fundingresearch.com:8080/'
 
 const instance = axios.create({
   baseURL: url,
+  withCredentials: true,
 })
-
-// instance.interceptors.request.use(function (req) {
-//   const token = localStorage.getItem("token");
-//   if (token) {
-//     req.headers.authorization = `Bearer ${token}`;
-//     return req;
-//   }
-
-//   return req;
-// });
 
 export default instance
