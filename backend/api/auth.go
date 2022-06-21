@@ -91,10 +91,10 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		Name:    "token",
 		Value:   tokenString,
 		Expires: tokenExpirationTime,
-		// Path: "/",
-		// HttpOnly: false,
-		// SameSite: http.SameSiteNoneMode,
-		// Secure: true,
+		Path: "/",
+		HttpOnly: false,
+		SameSite: http.SameSiteStrictMode,
+		Domain: "fundingresearch.com",
 	})
 
 	response := LoginSuccessResponse{
