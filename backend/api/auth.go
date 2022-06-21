@@ -9,10 +9,10 @@ import (
 )
 
 type LoginSuccessResponse struct {
-	Username string `json:"username"`
-	Role     string `json:"role"`
-	Token    string `json:"token"`
-	IsDataComplete bool `json:"isDataComplete"`
+	Username       string `json:"username"`
+	Role           string `json:"role"`
+	Token          string `json:"token"`
+	IsDataComplete bool   `json:"isDataComplete"`
 }
 
 type RegisterSuccessResponse struct {
@@ -70,13 +70,7 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isDataComplete, err := api.checkUserDataComplete(*roleID, *userId)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(AuthErrorResponse{Error: err.Error()})
-		return
-	}
-
+	isDataComplete := api.checkUserDataComplete(*roleID, *userId)
 
 	roleName, err := api.usersRepo.FetchRoleByID(*roleID)
 	if err != nil {
@@ -104,19 +98,19 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: tokenExpirationTime,
-		Path: "/",
+		Name:     "token",
+		Value:    tokenString,
+		Expires:  tokenExpirationTime,
+		Path:     "/",
 		HttpOnly: false,
 		SameSite: http.SameSiteStrictMode,
-		Domain: "fundingresearch.com",
+		Domain:   "fundingresearch.com",
 	})
 
 	response := LoginSuccessResponse{
-		Username: *username,
-		Role:     *roleName,
-		Token:    tokenString,
+		Username:       *username,
+		Role:           *roleName,
+		Token:          tokenString,
 		IsDataComplete: isDataComplete,
 	}
 
@@ -198,34 +192,34 @@ func (api *API) logout(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (api *API) checkUserDataComplete(roleID, userId int64) (bool, error) {
+func (api *API) checkUserDataComplete(roleID, userId int64) (bool) {
 	if roleID == 2 {
 		industryId, err := api.industryProfilesRepo.GetIndustryIdByUserId(userId)
 		if err != nil {
-			return false, err
+			return false
 		}
 
 		industryProfile, err := api.industryProfilesRepo.GetIndustryProfile(*industryId)
 		if err != nil {
-			return false, err
+			return false
 		}
 
 		if industryProfile.Name == "" || industryProfile.Description == "" || industryProfile.Address == "" || industryProfile.IndustryCategory == "" || industryProfile.PhoneNumber == "" {
-			return false, nil	
+			return false
 		} else {
-			return true, nil
+			return true
 		}
 	} else if roleID == 3 {
 		researcherProfile, err := api.researcherProfileRepo.GetResearcherProfile(userId)
 		if err != nil {
-			return false, err
+			return false
 		}
 
 		if researcherProfile.TeamName == "" || researcherProfile.LeaderName == "" || researcherProfile.PhoneNumber == "" || researcherProfile.NIDN == "" || researcherProfile.CollegeName == "" || researcherProfile.Address == "" {
-			return false, nil
+			return false
 		} else {
-			return true, nil
+			return true
 		}
 	}
-	return false, nil
+	return false
 }
