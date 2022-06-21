@@ -19,6 +19,11 @@ function TopBar() {
 
     setShowMenu(!showMenu)
   }
+
+  const handleLogout = () => {
+    logout()
+    setShowMenu(false)
+  }
   return (
     <div className="w-full bg-black p-6 flex justify-end items-center space-x-5">
       <div className="flex space-x-5  ">
@@ -38,7 +43,7 @@ function TopBar() {
             <button onClick={handleNavigate} className="px-10 py-2 hover:bg-gray-100">
               Profile
             </button>
-            <button className="px-10 py-2 hover:bg-gray-100 mt-2" onClick={logout}>
+            <button className="px-10 py-2 hover:bg-gray-100 mt-2" onClick={handleLogout}>
               Logout
             </button>
           </div>
