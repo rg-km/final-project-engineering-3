@@ -3,6 +3,7 @@ module github.com/rg-km/final-project-engineering-3
 go 1.17
 
 require (
+	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/mattn/go-sqlite3 v1.14.13
 	github.com/onsi/ginkgo/v2 v2.1.3
