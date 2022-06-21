@@ -2,10 +2,11 @@ import create from 'zustand'
 import axiosClient from '../config/axiosClient'
 import { immer } from 'zustand/middleware/immer'
 import { devtools } from 'zustand/middleware'
+
 const useUserStore = create(
   devtools(
     immer((set) => ({
-      user: null,
+      user: JSON.parse(localStorage.getItem('@funding-research/userData')),
       errorMessage: null,
       isLoading: false,
       login: async (userData) => {
@@ -39,12 +40,7 @@ const useUserStore = create(
           state.errorMessage = null
         })
         localStorage.removeItem('@funding-research/userData')
-        window.location.href = '/'
       },
-      getUserData: () =>
-        set((state) => {
-          state.user = JSON.parse(localStorage.getItem('@funding-research/userData'))
-        }),
       resetErrorMessage: () =>
         set((state) => {
           state.errorMessage = null
