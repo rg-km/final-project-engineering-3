@@ -79,5 +79,5 @@ type ResearchProposalReview struct {
 	ResearchItemId  int64 `json:"research_item_id"`
 	ProposalId      int64 `json:"proposal_id"`
 	FundingStatusId int64 `json:"funding_status_id"`
-	TotalFunding    int64 `json:"total_funding"`
+	TotalScore      int64 `json:"total_score"`
 }

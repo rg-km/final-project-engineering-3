@@ -9,10 +9,10 @@ import (
 )
 
 type LoginSuccessResponse struct {
-	Username string `json:"username"`
-	Role     string `json:"role"`
-	Token    string `json:"token"`
-	IsDataComplete bool `json:"isDataComplete"`
+	Username       string `json:"username"`
+	Role           string `json:"role"`
+	Token          string `json:"token"`
+	IsDataComplete bool   `json:"isDataComplete"`
 }
 
 type RegisterSuccessResponse struct {
@@ -77,7 +77,6 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	roleName, err := api.usersRepo.FetchRoleByID(*roleID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -104,19 +103,19 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: tokenExpirationTime,
-		Path: "/",
+		Name:     "token",
+		Value:    tokenString,
+		Expires:  tokenExpirationTime,
+		Path:     "/",
 		HttpOnly: false,
 		SameSite: http.SameSiteStrictMode,
-		Domain: "fundingresearch.com",
+		Domain:   "fundingresearch.com",
 	})
 
 	response := LoginSuccessResponse{
-		Username: *username,
-		Role:     *roleName,
-		Token:    tokenString,
+		Username:       *username,
+		Role:           *roleName,
+		Token:          tokenString,
 		IsDataComplete: isDataComplete,
 	}
 
@@ -211,7 +210,7 @@ func (api *API) checkUserDataComplete(roleID, userId int64) (bool, error) {
 		}
 
 		if industryProfile.Name == "" || industryProfile.Description == "" || industryProfile.Address == "" || industryProfile.IndustryCategory == "" || industryProfile.PhoneNumber == "" {
-			return false, nil	
+			return false, nil
 		} else {
 			return true, nil
 		}
