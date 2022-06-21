@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,6 +14,15 @@ type ResearchProposalReviewResponse struct {
 	ResearcherProfile *repository.ResearcherProfile `json:"researcher_profile"`
 	Proposal          *repository.Proposal          `json:"proposal"`
 	FundingStatus     *repository.FundingStatus     `json:"funding_status"`
+}
+
+type PostApprovalRequest struct {
+	FundingStatusId int `json:"funding_status_id"`
+}
+
+type PostApprovalSuccessResponse struct {
+	Status       string                             `json:"status"`
+	DataReviewed *repository.ResearchProposalReview `json:"data_reviewed"`
 }
 
 type ReviewErrorDetailResponse struct {
@@ -118,5 +128,59 @@ func (api *API) getReviewrReviewDetails(w http.ResponseWriter, r *http.Request) 
 		ResearcherProfile: researcherProfile,
 		Proposal:          proposal,
 		FundingStatus:     fundingStatus,
+	})
+}
+
+func (api *API) postApproval(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+	var researchProposalReview *repository.ResearchProposalReview
+	var fundingStatusId PostApprovalRequest
+
+	reviewIdString, ok := r.URL.Query()["review_id"]
+	if !ok || len(reviewIdString) != 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ReviewErrorResponse{Error: ReviewErrorDetailResponse{
+			Name:    "Invalid URL Parameter",
+			Message: "Reviewer_id is required",
+		}})
+		return
+	}
+
+	reviewId, _ := strconv.Atoi(reviewIdString[0])
+	err := json.NewDecoder(r.Body).Decode(&fundingStatusId)
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ReviewErrorResponse{Error: ReviewErrorDetailResponse{
+			Name:    "Invalid JSON",
+			Message: "Invalid JSON",
+		}})
+		return
+	}
+
+	err = api.proposalReviewRepo.PostFundingStatus(reviewId, fundingStatusId.FundingStatusId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ReviewErrorResponse{Error: ReviewErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: "Failed to update Funding Status",
+		}})
+		return
+	}
+
+	researchProposalReview, err = api.proposalReviewRepo.GetResearchProposalReview(reviewId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ReviewErrorResponse{Error: ReviewErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: "Failed to get Proposal review details",
+		}})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(PostApprovalSuccessResponse{
+		Status:       "Success",
+		DataReviewed: researchProposalReview,
 	})
 }

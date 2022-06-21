@@ -59,7 +59,7 @@ func (prr *ProposalReviewRepository) GetResearchProposalReview(reviewId int) (*R
 		&researchProposalReview.ResearchItemId,
 		&researchProposalReview.ProposalId,
 		&researchProposalReview.FundingStatusId,
-		&researchProposalReview.TotalFunding,
+		&researchProposalReview.TotalScore,
 	)
 
 	return &researchProposalReview, nil
@@ -82,4 +82,20 @@ func (prr *ProposalReviewRepository) GetFundingStatus(fundingStatusId int) (*Fun
 	)
 
 	return &fundingStatus, nil
+}
+
+func (prr *ProposalReviewRepository) PostFundingStatus(reviewId, fundingStatusId int) error {
+	sqlStatement := `
+		UPDATE research_proposal_review
+		SET funding_status_id = ?
+		WHERE id = ?
+		RETURNING id
+	`
+
+	_, err := prr.db.Exec(sqlStatement, fundingStatusId, reviewId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

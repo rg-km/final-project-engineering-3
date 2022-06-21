@@ -46,6 +46,7 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 	mux.Handle("/industry/challenge/delete", api.DELETE(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.deleteChallenge)))))
 	mux.Handle("/industry/challenge/review/challengers", api.GET(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.getTheChallengers)))))
 	mux.Handle("/industry/challenge/review/details/", api.GET(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.getReviewrReviewDetails)))))
+	mux.Handle("/industry/challenge/review/details/approval", api.PUT(api.AuthMiddleware(api.IndustryMiddleware(http.HandlerFunc(api.postApproval)))))
 
 	// API with AuthMiddleware and ResearcherMiddleware
 	mux.Handle("/researcher/profile", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProfile)))))
