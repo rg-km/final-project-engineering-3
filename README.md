@@ -1,9 +1,20 @@
-# fundingresearch.com
+# Funding Research App
+
+## About the App
+fundingresearch.com is an application for research funding between universities and industry/companies as one of the best ways to decide the problems in Indonesia. The main objectives of this application are:
+- Increasing the role of universities in providing guidance to researchers/lecturers at universities in producing quality research.
+- Increasing university research collaboration with a partnership system encourages increased quality and quantity of research and its outputs to provide high benefits for industry or community groups in need.
+- The industrial sector can provide research funding for universities, then companies can access new research and discoveries that will significantly assist in developing company processes and products.
 
 ## Software Requirements
 - Go Language
 - SQLite
-- Javascript
+- Nodejs v14 or higher
+- React v18.1.0 
+- react-router-dom v6.3.0
+- tailwindcss v3.0.24
+- zustand v4.0.0-rc.1
+- react-icons v4.4.0
 
 ## Installation
 Clone it!
@@ -16,17 +27,25 @@ git clone https://github.com/rg-km/final-project-engineering-3.git
 ```
 go run backend/db/migration/main.go
 ```
-2. Run `main.go` inside directory `backend/` to run service
-```
-go run main.go
-```
+2. Run `main.go` inside directory `/backend` to run service
 3. Try and enjoy!
 ```
 http://localhost:8080/
 ```
 
 - **Front-End**
-
+1. Run this command directory `/frontend`
+```
+npm install
+```
+after that,
+```
+npm start
+```
+2. Try and enjoy!
+```
+http://localhost:8080/
+```
 
 ## Available APIs
 - **All Role**
@@ -54,7 +73,7 @@ http://localhost:8080/
 	- `GET`  : `/researcher/chalange/list`
 	- `GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
 
-APIs Details <link-to-postman-api.com>
+API documentation can be found at <link-to-postman-api.com>
 
 ## Contributors
 - FE2025536	ADRIAN OCTAVIUS <https://github.com/adrnct>
