@@ -45,6 +45,13 @@ const useUserStore = create(
         set((state) => {
           state.errorMessage = null
         }),
+      setUser: (data) => {
+        set((state) => {
+          state.user = data
+        })
+        const stringData = JSON.stringify(data)
+        localStorage.setItem('@funding-research/userData', stringData)
+      },
     })),
   ),
 )
