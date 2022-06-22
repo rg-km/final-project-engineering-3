@@ -18,12 +18,12 @@ fundingresearch.com is an application for research funding between universities 
 - react-icons v4.4.0
 
 ## Installation
-Clone it!
+**Clone it!**
 ```
 git clone https://github.com/rg-km/final-project-engineering-3.git
 ```
 
-- **Back-End**
+**Back-End**
 1. Run `main.go` inside directory `backend/db/migration` to Migration database SQLite
 ```
 go run backend/db/migration/main.go
@@ -34,12 +34,11 @@ go run backend/db/migration/main.go
 http://localhost:8080/
 ```
 
-- **Front-End**
+**Front-End**
 1. Run this command inside directory `/frontend`
 ```
 npm install
 ```
-after that,
 ```
 npm start
 ```
@@ -49,30 +48,30 @@ http://localhost:8080/
 ```
 
 ## Available APIs
-- **All Role**
-	- `POST` : `/login`
-	- `POST` : `/register`
-	- `POST` : `/logout`
+**All Role**
+`POST` : `/login`
+`POST` : `/register`
+`POST` : `/logout`
 
-- **Industry Role**
-	- `PUT`  : `/industry/profile/edit`
-	- `GET`  : `/industry/profile`
-	- `POST` : `/industry/challenge/post`
-	- `PUT`  : `/industry/challenge/edit?challenge_id=<challenge_id>`
-	- `DEL`  : `/industry/challenge/delete?challenge_id=<challenge_id>`
-	- `GET`  : `/industry/challenge/review/challengers?challenge_id=<challenge_id>`
-	- `GET`  : `/industry/challenge/review/details/?review_id=<review_id>`
-	- `POST` : `/industry/challenge/review/details/approval?review_id=<review_id>`
+**Industry Role**
+`PUT`  : `/industry/profile/edit`
+`GET`  : `/industry/profile`
+`POST` : `/industry/challenge/post`
+`PUT`  : `/industry/challenge/edit?challenge_id=<challenge_id>`
+`DEL`  : `/industry/challenge/delete?challenge_id=<challenge_id>`
+`GET`  : `/industry/challenge/review/challengers?challenge_id=<challenge_id>`
+`GET`  : `/industry/challenge/review/details/?review_id=<review_id>`
+`POST` : `/industry/challenge/review/details/approval?review_id=<review_id>`
 
-- **Researcher Role**
-	- `GET`  : `/researcher/profile`
-	- `GET`  : `/researcher/proposal`
-	- `GET`  : `/research/details?challenge_id=<challenge_id>`
-	- `POST` : `/researcher/challenge/apply?challenge_id=<challenge_id>`
-	- `POST` : `/researcher/challenge/upload?proposal_id=<proposal_id>`
-	- `POST` : `/researcher/profile/add`
-	- `GET`  : `/researcher/chalange/list`
-	- `GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
+**Researcher Role**
+`GET`  : `/researcher/profile`
+`GET`  : `/researcher/proposal`
+`GET`  : `/research/details?challenge_id=<challenge_id>`
+`POST` : `/researcher/challenge/apply?challenge_id=<challenge_id>`
+`POST` : `/researcher/challenge/upload?proposal_id=<proposal_id>`
+`POST` : `/researcher/profile/add`
+`GET`  : `/researcher/chalange/list`
+`GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
 
 API documentation can be found at <link-to-postman-api.com>
 
