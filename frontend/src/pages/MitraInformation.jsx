@@ -13,21 +13,23 @@ function MitraInformation() {
   const user = useUserStore((state) => state.user)
   const setUser = useUserStore((state) => state.setUser)
 
-  const { data: defaultData } = useFetchData(null, '/industry/profile')
+  const { response } = useFetchData(null, '/industry/profile')
 
   const [isLoading, setIsLoading] = useState(false)
   const [filename, setFilename] = useState('')
   const [defaultCategory, setDefaultCategory] = useState(0)
 
   useEffect(() => {
-    if (defaultData) {
-      const category = MITRA_CATEGORIES.find((item) => item.name === defaultData.industry_category)
+    if (response?.data) {
+      const category = MITRA_CATEGORIES.find(
+        (item) => item.name === response.data.industry_category,
+      )
 
       if (category) {
         setDefaultCategory(category.id)
       }
     }
-  }, [defaultData])
+  }, [response])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -64,7 +66,7 @@ function MitraInformation() {
               className="py-2 border-b border-black outline-none  focus:border-blue-700"
               name="name"
               required
-              defaultValue={defaultData?.name}
+              defaultValue={response?.data?.name}
             />
           </div>
           <div className="space-y-3 flex flex-col">
@@ -74,7 +76,7 @@ function MitraInformation() {
               className="py-2 border-b border-black outline-none  focus:border-blue-700"
               name="address"
               required
-              defaultValue={defaultData?.address}
+              defaultValue={response?.data?.address}
             />
           </div>
           <div className="space-y-3 flex flex-col">
@@ -84,7 +86,7 @@ function MitraInformation() {
               rows={5}
               placeholder="Tulis rincian kegiatan disini"
               name="description"
-              defaultValue={defaultData?.description}
+              defaultValue={response?.data?.description}
             ></textarea>
           </div>
           <div className="space-y-3 flex flex-col">
@@ -92,7 +94,8 @@ function MitraInformation() {
             <select
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700 outline-none"
               name="industry_category_id"
-              defaultValue={defaultCategory}
+              value={defaultCategory}
+              onChange={(e) => setDefaultCategory(e.currentTarget.value)}
             >
               {MITRA_CATEGORIES.map((category) => (
                 <option value={category.id} key={category.id}>
@@ -109,7 +112,7 @@ function MitraInformation() {
               className="border border-black p-2 outline-none focus:border-blue-700"
               name="num_of_employees"
               required
-              defaultValue={defaultData?.num_of_employees}
+              defaultValue={response?.data?.num_of_employees}
             />
           </div>
           <div className="space-y-3 flex flex-col">
@@ -119,7 +122,7 @@ function MitraInformation() {
               className="border border-black p-2 outline-none focus:border-blue-700"
               name="phone_number"
               required
-              defaultValue={defaultData?.phone_number}
+              defaultValue={response?.data?.phone_number}
             />
           </div>
           <div>
