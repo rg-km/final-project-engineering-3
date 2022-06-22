@@ -49,29 +49,29 @@ http://localhost:8080/
 
 ## Available APIs
 **All Role**
-`POST` : `/login`
-`POST` : `/register`
-`POST` : `/logout`
+- `POST` : `/login`
+- `POST` : `/register`
+- `POST` : `/logout`
 
 **Industry Role**
-`PUT`  : `/industry/profile/edit`
-`GET`  : `/industry/profile`
-`POST` : `/industry/challenge/post`
-`PUT`  : `/industry/challenge/edit?challenge_id=<challenge_id>`
-`DEL`  : `/industry/challenge/delete?challenge_id=<challenge_id>`
-`GET`  : `/industry/challenge/review/challengers?challenge_id=<challenge_id>`
-`GET`  : `/industry/challenge/review/details/?review_id=<review_id>`
-`POST` : `/industry/challenge/review/details/approval?review_id=<review_id>`
+- `PUT`  : `/industry/profile/edit`
+- `GET`  : `/industry/profile`
+- `POST` : `/industry/challenge/post`
+- `PUT`  : `/industry/challenge/edit?challenge_id=<challenge_id>`
+- `DEL`  : `/industry/challenge/delete?challenge_id=<challenge_id>`
+- `GET`  : `/industry/challenge/review/challengers?challenge_id=<challenge_id>`
+- `GET`  : `/industry/challenge/review/details/?review_id=<review_id>`
+- `POST` : `/industry/challenge/review/details/approval?review_id=<review_id>`
 
 **Researcher Role**
-`GET`  : `/researcher/profile`
-`GET`  : `/researcher/proposal`
-`GET`  : `/research/details?challenge_id=<challenge_id>`
-`POST` : `/researcher/challenge/apply?challenge_id=<challenge_id>`
-`POST` : `/researcher/challenge/upload?proposal_id=<proposal_id>`
-`POST` : `/researcher/profile/add`
-`GET`  : `/researcher/chalange/list`
-`GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
+- `GET`  : `/researcher/profile`
+- `GET`  : `/researcher/proposal`
+- `GET`  : `/research/details?challenge_id=<challenge_id>`
+- `POST` : `/researcher/challenge/apply?challenge_id=<challenge_id>`
+- `POST` : `/researcher/challenge/upload?proposal_id=<proposal_id>`
+- `POST` : `/researcher/profile/add`
+- `GET`  : `/researcher/chalange/list`
+- `GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
 
 API documentation can be found at <link-to-postman-api.com>
 
