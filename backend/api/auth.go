@@ -104,7 +104,7 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 		HttpOnly: false,
 		SameSite: http.SameSiteStrictMode,
-		// Domain:   "fundingresearch.com",
+		Domain:   "fundingresearch.com",
 	})
 
 	response := LoginSuccessResponse{
