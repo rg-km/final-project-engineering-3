@@ -15,7 +15,7 @@ function PostChallenge() {
       {step === 1 ? (
         <TimePeriod setTimePeriod={setTimePeriod} next={() => setStep(2)} timePeriod={timePeriod} />
       ) : (
-        <FormChallenge previous={() => setStep(1)} />
+        <FormChallenge previous={() => setStep(1)} timePeriod={timePeriod} />
       )}
     </div>
   )
