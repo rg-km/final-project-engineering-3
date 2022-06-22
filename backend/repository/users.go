@@ -89,6 +89,10 @@ func (u *UserRepository) FetchUserIdByUsername(username string) (*int64, error) 
 func (u *UserRepository) Register(username, password, email string, role_id int64) (*int64, error) {
 	var sqlStatement string
 	var id int64
+	tx, err := u.db.Begin()
+	if err != nil {
+		return nil, err
+	}
 
 	sqlStatement = "INSERT INTO user (username, password, email, role_id, is_logged_in, activation_token, activation_token_expiration) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id"
 
@@ -97,26 +101,23 @@ func (u *UserRepository) Register(username, password, email string, role_id int6
 		return nil, err
 	}
 
-	row := u.db.QueryRow(sqlStatement, username, hashedPassword, email, role_id, 0, "", "")
+	row := tx.QueryRow(sqlStatement, username, hashedPassword, email, role_id, 0, "", "")
 	err = row.Scan(&id)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
 	if role_id == 2 {
 		sqlStatement = `INSERT INTO industry_profile (user_id) VALUES (?)`
-		_, err = u.db.Exec(sqlStatement, id)
+		_, err = tx.Exec(sqlStatement, id)
 		if err != nil {
-			return nil, err
-		}
-	} else if role_id == 3 {
-		sqlStatement = `INSERT INTO researcher_profile (user_id) VALUES (?)`
-		_, err = u.db.Exec(sqlStatement, id)
-		if err != nil {
+			tx.Rollback()
 			return nil, err
 		}
 	}
 
+	tx.Commit()
 	return &id, nil
 }
 
@@ -142,7 +143,7 @@ func (u *UserRepository) Logout(userId int64) (*bool, error) {
 	return &isLoggedOut, nil
 }
 
-func (u *UserRepository) CheckUsernameAndEmail(username, email string) (bool) {
+func (u *UserRepository) CheckUsernameAndEmail(username, email string) bool {
 	var sqlStatement string
 	var userId int64
 
