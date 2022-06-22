@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/rg-km/final-project-engineering-3/backend/repository"
 )
@@ -240,4 +241,34 @@ func (api *API) getResearcherChallenges(w http.ResponseWriter, r *http.Request) 
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(challengeList)
+}
+
+func (api *API) downloadProposalFile(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	fileName := r.URL.Query().Get("file_name")
+	if fileName == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(IndustryProfileErrorResponse{Error: IndustryProfileErrorDetailResponse{
+			Name: "Require file_name",
+			Message: "file_name is required",
+		}})
+		return
+	}
+
+	file, err := os.Open(fileName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(IndustryProfileErrorResponse{Error: IndustryProfileErrorDetailResponse{
+			Name: "Invalid file",
+			Message: "Invalid file",
+		}})
+	}
+
+	defer file.Close()
+
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Type", "application/pdf")
+	http.ServeContent(w, r, fileName+".pdf", time.Now(), file)
+
 }

@@ -32,7 +32,11 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 	mux.Handle("/login", api.POST(http.HandlerFunc(api.login)))
 	mux.Handle("/register", api.POST(http.HandlerFunc(api.register)))
 
+	mux.Handle("/industry/logo", api.GET(http.HandlerFunc(api.getIndustryLogo)))
+
 	mux.Handle("/research/details", api.GET(http.HandlerFunc(api.getChallengeById)))
+	mux.Handle("/research/guide-file", api.GET(http.HandlerFunc(api.downloadGuideFile)))
+	mux.Handle("/proposal/files", api.GET(http.HandlerFunc(api.downloadProposalFile)))
 
 	// API with AuthMiddleware
 	mux.Handle("/logout", api.POST(api.AuthMiddleware(http.HandlerFunc(api.logout))))

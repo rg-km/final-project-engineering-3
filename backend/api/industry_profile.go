@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -27,6 +28,15 @@ type IndustryProfileRequest struct {
 	NumOfEmployees     int64  `json:"num_of_employees"`
 	PhoneNumber        string `json:"phone_number"`
 	Logo               string `json:"logo"`
+}
+
+type IndustryProfileErrorDetailResponse struct {
+	Name    string `json:"name"`
+	Message string `json:"message"`
+}
+
+type IndustryProfileErrorResponse struct {
+	Error IndustryProfileErrorDetailResponse `json:"error"`
 }
 
 func (api *API) getIndustryProfile(w http.ResponseWriter, r *http.Request) {
@@ -172,4 +182,32 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		Status: "Success",
 		Data:   profileData,
 	})
+}
+
+func (api *API) getIndustryLogo(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	fileName := r.URL.Query().Get("file_name")
+	if fileName == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(IndustryProfileErrorResponse{Error: IndustryProfileErrorDetailResponse{
+			Name: "Require file_name",
+			Message: "file_name is required",
+		}})
+		return
+	}
+
+	file, err := os.Open(fileName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(IndustryProfileErrorResponse{Error: IndustryProfileErrorDetailResponse{
+			Name: "Invalid file",
+			Message: "Invalid file",
+		}})
+	}
+	
+	defer file.Close()
+
+	w.Header().Set("Content-Type", "image/jpeg")
+	io.Copy(w, file)
 }
