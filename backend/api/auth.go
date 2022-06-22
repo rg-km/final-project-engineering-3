@@ -215,7 +215,7 @@ func (api *API) logout(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (api *API) checkUserDataComplete(roleID, userId int64) (bool) {
+func (api *API) checkUserDataComplete(roleID, userId int64) bool {
 	if roleID == 2 {
 		industryId, err := api.industryProfilesRepo.GetIndustryIdByUserId(userId)
 		if err != nil {
