@@ -1,5 +1,6 @@
 import React from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
+import { Link } from 'react-router-dom'
 import Accordion from '../components/shared/Accordion'
 import Spinner from '../components/shared/Spinner'
 import useFetchData from '../hooks/useFetchData'
@@ -8,6 +9,7 @@ import useUserStore from '../store/useUserStore'
 function MitraProfile() {
   const { data, isFetching } = useFetchData(null, '/industry/profile')
   const user = useUserStore((state) => state.user)
+  const logout = useUserStore((state) => state.logout)
 
   if (isFetching || !data) return <Spinner className="w-10 h-10 mt-10" />
 
@@ -23,9 +25,20 @@ function MitraProfile() {
               <div className="text-xl font-semibold">{user?.username}</div>
               <div className="text-sm">email</div>
             </div>
-            <button className="mt-5 text-white px-3 py-2 rounded-md bg-blue-700 hover:bg-blue-800">
-              Logout
-            </button>
+            <div className="flex gap-x-3">
+              <Link
+                to="/mitra/information"
+                className="mt-5 text-white px-3 py-2 rounded-md bg-blue-700 hover:bg-blue-800"
+              >
+                Edit Profile
+              </Link>
+              <button
+                className="mt-5 text-white px-3 py-2 rounded-md bg-red-700 hover:bg-red-800"
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
         <div className="p-5 bg-gray-100">
