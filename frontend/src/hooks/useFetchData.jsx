@@ -12,7 +12,7 @@ function useFetchData(defaultValue, endpoint) {
         setIsFetching(true)
         const { data } = await axiosClient.get(endpoint)
         setIsFetching(false)
-        setData(data.data)
+        setData(data)
       } catch (err) {
         console.error(err)
       } finally {
@@ -23,7 +23,7 @@ function useFetchData(defaultValue, endpoint) {
   }, [endpoint])
 
   return {
-    data,
+    response: data,
     isFetching,
   }
 }
