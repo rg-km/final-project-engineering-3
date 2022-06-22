@@ -480,3 +480,62 @@ func (api *API) deleteChallenge(w http.ResponseWriter, r *http.Request) {
 		Message:     "Research Challenge Delete Successful",
 	})
 }
+
+func (api *API) downloadGuideFile(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	rawChallengeId := r.URL.Query().Get("challenge_id")
+	if rawChallengeId == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Invalid URL Parameter",
+			Message: "challenge_id is required",
+		}})
+		return
+	}
+
+	challengeId, err := strconv.Atoi(rawChallengeId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: "internal server error",
+		}})
+		return
+	}
+
+	challengeIsExist, _ := api.industryChallengeRepo.CheckChallengeById(challengeId)
+	if !*challengeIsExist {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Not Found",
+			Message: "challenge_id is not exist",
+		}})
+		return
+	}
+
+	guideFileLocation, err := api.industryChallengeRepo.GetGuideFileLocation(challengeId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+	}
+
+	file, err := os.Open(*guideFileLocation)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ChallengeErrorResponse{Error: ChallengeErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	defer file.Close()
+
+	w.Header().Set("Content-Disposition", "attachment; filename=guide.pdf")
+	w.Header().Set("Content-Type", "application/pdf")
+	http.ServeContent(w, r, "guide.pdf", time.Now(), file)
+}
