@@ -66,7 +66,7 @@ func (api *API) uploadLogo(industryId int, handler multipart.FileHeader, file mu
 	currentTime := time.Now().Unix()
 	filename := fmt.Sprintf("logo-%d-%v%s", industryId, currentTime, filepath.Ext(handler.Filename))
 	fileLocation := filepath.Join(dir, filename)
-	targetFile, err := os.OpenFile(fileLocation, os.O_CREATE, 06666)
+	targetFile, err := os.OpenFile(fileLocation, os.O_WRONLY|os.O_CREATE, 06666)
 	if err != nil {
 		return nil, err
 	}
