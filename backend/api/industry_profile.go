@@ -72,13 +72,14 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 	userId, err = api.usersRepo.FetchUserIdByUsername(username.(string))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: "Invalid fetch user id"})
+		return
 	}
 
 	profileId, err := api.industryProfilesRepo.GetIndustryIdByUserId(*userId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: "Invalid fetch industry id"})
 		return
 	}
 
@@ -96,7 +97,7 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: "Invalid update"})
 		return
 	}
 
