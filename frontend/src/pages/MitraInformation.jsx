@@ -5,33 +5,47 @@ import { useNavigate } from 'react-router-dom'
 import useFetchData from '../hooks/useFetchData'
 import { MITRA_CATEGORIES } from '../helper/constants'
 import useUserStore from '../store/useUserStore'
+import { useEffect } from 'react'
 
 function MitraInformation() {
-  const [filename, setFilename] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const { data: defaultData } = useFetchData(null, '/industry/profile')
+
   const user = useUserStore((state) => state.user)
   const setUser = useUserStore((state) => state.setUser)
+
+  const { data: defaultData } = useFetchData(null, '/industry/profile')
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [filename, setFilename] = useState('')
+  const [defaultCategory, setDefaultCategory] = useState(0)
+
+  useEffect(() => {
+    if (defaultData) {
+      const category = MITRA_CATEGORIES.find((item) => item.name === defaultData.industry_category)
+
+      if (category) {
+        setDefaultCategory(category.id)
+      }
+    }
+  }, [defaultData])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-    const data = Object.fromEntries(formData.entries())
 
     try {
       setIsLoading(true)
-      await axiosClient.put('/industry/profile/edit', {
-        ...data,
-        industry_category_id: Number(data.industry_category_id),
-        num_of_employees: Number(data.num_of_employees),
-        logo: '',
+      await axiosClient.put('/industry/profile/edit', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
       setIsLoading(false)
       navigate('/posted-challenges')
       setUser({ ...user, isDataComplete: true })
     } catch (err) {
+      setIsLoading(false)
       console.error(err)
     }
   }
@@ -76,15 +90,12 @@ function MitraInformation() {
           <div className="space-y-3 flex flex-col">
             <label htmlFor="">Bidang/Kategori Industri</label>
             <select
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700 outline-none"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700 outline-none"
               name="industry_category_id"
+              defaultValue={defaultCategory}
             >
               {MITRA_CATEGORIES.map((category) => (
-                <option
-                  value={category.id}
-                  key={category.id}
-                  selected={category.name === defaultData?.industry_category}
-                >
+                <option value={category.id} key={category.id}>
                   {category.name}
                 </option>
               ))}
@@ -131,6 +142,7 @@ function MitraInformation() {
                     className="opacity-0 absolute inset-0 focus:border-black"
                     name="logo"
                     accept="image/*"
+                    required
                     onChange={(e) => setFilename(e.target.files[0].name)}
                   />
                 </div>
