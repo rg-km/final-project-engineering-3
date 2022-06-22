@@ -1,4 +1,5 @@
-# Funding Research App
+# Research Funding App
+![banner](banner.png)
 
 ## About the App
 fundingresearch.com is an application for research funding between universities and industry/companies as one of the best ways to decide the problems in Indonesia. The main objectives of this application are:
@@ -34,7 +35,7 @@ http://localhost:8080/
 ```
 
 - **Front-End**
-1. Run this command directory `/frontend`
+1. Run this command inside directory `/frontend`
 ```
 npm install
 ```
