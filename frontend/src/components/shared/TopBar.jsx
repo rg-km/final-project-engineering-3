@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
+import useClickOutside from '../../hooks/useClickOutside'
 import useUserStore from '../../store/useUserStore'
 import MitraNavigation from '../navigation/MitraNavigation'
 import ResearcherNavigation from '../navigation/ResearcherNavigation'
@@ -10,8 +11,11 @@ function TopBar() {
   const logout = useUserStore((state) => state.logout)
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
+  const menuRef = useClickOutside(() => {
+    setShowMenu(false)
+  })
 
-  const handleNavigate = () => {
+  const handleNavigate = (e) => {
     if (user.role === 'industry') {
       navigate('/mitra/profile')
     } else {
@@ -25,6 +29,12 @@ function TopBar() {
     logout()
     setShowMenu(false)
   }
+
+  const toggleMenu = (e) => {
+    e.stopPropagation()
+    setShowMenu(!showMenu)
+  }
+
   return (
     <div className="w-full bg-black p-6 flex justify-end items-center space-x-5">
       <div className="flex space-x-5  ">
@@ -34,13 +44,16 @@ function TopBar() {
         <button
           className="flex space-x-3 bg-white px-5 py-3 rounded-full
       "
-          onClick={user ? () => setShowMenu(!showMenu) : () => navigate('/login')}
+          onClick={user ? toggleMenu : () => navigate('/login')}
         >
           <FaUserCircle fontSize={24} />
           {!user && <span className="">Masuk</span>}
         </button>
         {showMenu && (
-          <div className="absolute fle flex-col top-14 right-0 p-3 bg-white shadow-md rounded-md">
+          <div
+            className="absolute fle flex-col top-14 right-0 p-3 bg-white shadow-md rounded-md"
+            ref={menuRef}
+          >
             <button onClick={handleNavigate} className="px-10 py-2 hover:bg-gray-100">
               Profile
             </button>
