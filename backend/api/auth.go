@@ -118,8 +118,6 @@ func (api *API) login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-
-
 func (api *API) register(w http.ResponseWriter, r *http.Request) {
 	api.AllowOrigin(w, r)
 	var creds Credentials
@@ -215,7 +213,7 @@ func (api *API) logout(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (api *API) checkUserDataComplete(roleID, userId int64) (bool) {
+func (api *API) checkUserDataComplete(roleID, userId int64) bool {
 	if roleID == 2 {
 		industryId, err := api.industryProfilesRepo.GetIndustryIdByUserId(userId)
 		if err != nil {
@@ -248,7 +246,7 @@ func (api *API) checkUserDataComplete(roleID, userId int64) (bool) {
 }
 
 func (api *API) sanitizeCredential(creds Credentials) string {
-	_ , err := govalidator.ValidateStruct(creds)
+	_, err := govalidator.ValidateStruct(creds)
 
 	if err != nil {
 		return err.Error()

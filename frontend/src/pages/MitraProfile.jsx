@@ -1,8 +1,18 @@
 import React from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
+import { Link } from 'react-router-dom'
 import Accordion from '../components/shared/Accordion'
+import Spinner from '../components/shared/Spinner'
+import useFetchData from '../hooks/useFetchData'
+import useUserStore from '../store/useUserStore'
 
 function MitraProfile() {
+  const { response, isFetching } = useFetchData(null, '/industry/profile')
+  const user = useUserStore((state) => state.user)
+  const logout = useUserStore((state) => state.logout)
+
+  if (isFetching || !response?.data) return <Spinner className="w-10 h-10 mt-10" />
+
   return (
     <div className="container">
       <div className="grid lg:grid-cols-[1fr_2fr] gap-3">
@@ -12,12 +22,22 @@ function MitraProfile() {
               <AiOutlineUser fontSize={64} />
             </div>
             <div className="mt-2 space-y-2 text-center lg:text-left">
-              <div className="text-xl font-semibold">Username</div>
-              <div className="text-sm">email</div>
+              <div className="text-xl font-semibold">{user?.username}</div>
             </div>
-            <button className="mt-5 text-white px-3 py-2 rounded-md bg-blue-700 hover:bg-blue-800">
-              Logout
-            </button>
+            <div className="flex gap-x-3">
+              <Link
+                to="/mitra/information"
+                className="mt-5 text-white px-3 py-2 rounded-md bg-blue-700 hover:bg-blue-800"
+              >
+                Edit Profile
+              </Link>
+              <button
+                className="mt-5 text-white px-3 py-2 rounded-md bg-red-700 hover:bg-red-800"
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
         <div className="p-5 bg-gray-100">
@@ -25,39 +45,28 @@ function MitraProfile() {
           <div className="flex flex-col mt-5 divide-y-2 space-y-3">
             <div className="py-2">
               <div className="text-xl font-semibold">Nama Perusahaan</div>
-              <div className="text-gray-500">PT. AA</div>
+              <div className="text-gray-500">{response.data.name}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Alamat Perusahaan</div>
-              <div className="text-gray-500">PT. AA</div>
+              <div className="text-gray-500">{response.data.address}</div>
             </div>
             <div className="py-2">
               <Accordion title={'Deskripsi Industri'} isOpen={true}>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, asperiores!
-                  Excepturi voluptates praesentium numquam accusantium maiores fuga natus placeat
-                  facilis odit, consequuntur modi hic laudantium pariatur magni quisquam tempore
-                  labore veniam laborum eligendi nemo architecto repudiandae. Explicabo saepe
-                  quisquam corrupti velit laborum fugiat quis aut, quia provident doloribus
-                  aspernatur modi excepturi, hic unde. Illum reprehenderit animi officiis
-                  voluptatibus molestias nam soluta sed facere, iusto amet accusantium tempore
-                  cumque ipsa, odit, quo optio. Aut porro fugiat quasi pariatur vitae, facilis
-                  labore, ipsa eum amet tempora nesciunt minima debitis eligendi, nulla provident
-                  inventore et adipisci hic animi repudiandae. At fuga dolor officiis.
-                </p>
+                <p className="text-gray-500">{response.data.description}</p>
               </Accordion>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Bidang / Kategori</div>
-              <div className="text-gray-500">PT. AA</div>
+              <div className="text-gray-500">{response.data.industry_category}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Jumlah Pegawai</div>
-              <div className="text-gray-500">PT. AA</div>
+              <div className="text-gray-500">{response.data.num_of_employees}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">No. Telp</div>
-              <div className="text-gray-500">PT. AA</div>
+              <div className="text-gray-500">{response.data.phone_number}</div>
             </div>
           </div>
         </div>
