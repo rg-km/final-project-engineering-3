@@ -78,6 +78,21 @@ func (u *UserRepository) FetchUserIdByUsername(username string) (*int64, error) 
 	return &id, nil
 }
 
+func (u *UserRepository) FetchIndustryIdByUserId(userId int64) (*int64, error) {
+	var sqlStatement string
+	var id int64
+
+	sqlStatement = "SELECT id FROM industry_profile WHERE user_id = ?"
+
+	row := u.db.QueryRow(sqlStatement, userId)
+	err := row.Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
+}
+
 func (u *UserRepository) Register(username, password, email string, role_id int64) (*int64, error) {
 	var sqlStatement string
 	var id int64

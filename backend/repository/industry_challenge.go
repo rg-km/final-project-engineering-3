@@ -203,3 +203,74 @@ func (icr *IndustryChallengeRepository) GetGuideFileLocation(challengeId int) (*
 
 	return &guideFileLocation, nil
 }
+
+func (icr *IndustryChallengeRepository) GetChallengeByIndustryId(industryId int64) ([]ResearchChallengeItem, error) {
+	var sqlStatement string
+	var researchChallenges []ResearchChallengeItem
+
+	sqlStatement = `
+	SELECT 
+			ri.id,
+			ri.name,
+			ri.details,
+			rc.name,
+			ri.period_start,
+			ri.period_end,
+			ri.max_funding,
+			ri.guide_file,
+			ri.quota,
+			ip.name
+		FROM research_item ri
+		INNER JOIN research_category rc ON ri.research_category_id = rc.id
+		INNER JOIN industry_profile ip ON ri.industry_id = ip.id
+		WHERE ri.industry_id = ?
+	`
+
+	rows, err := icr.db.Query(sqlStatement, industryId)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var researchChallenge ResearchChallengeItem
+
+		err := rows.Scan(
+			&researchChallenge.Id,
+			&researchChallenge.Name,
+			&researchChallenge.Details,
+			&researchChallenge.ResearchCategory,
+			&researchChallenge.PeriodStart,
+			&researchChallenge.PeriodEnd,
+			&researchChallenge.MaxFunding,
+			&researchChallenge.GuideFile,
+			&researchChallenge.Quota,
+			&researchChallenge.IndustryName,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		researchChallenges = append(researchChallenges, researchChallenge)
+	}
+
+	return researchChallenges, nil
+}
+
+func (icr *IndustryChallengeRepository) CheckChallengeByIndustryId(industryId int64) (bool, error) {
+	var sqlStatement string
+	var challengeExists bool
+
+	sqlStatement = `
+	SELECT COUNT(*)
+	FROM research_item 
+	WHERE industry_id = ?)
+	`
+
+	row := icr.db.QueryRow(sqlStatement, industryId)
+	err := row.Scan(&challengeExists)
+	if err != nil {
+		return false, err
+	}
+
+	return challengeExists, nil
+}
