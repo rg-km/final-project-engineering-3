@@ -16,6 +16,8 @@ import ProtectedRoute from './pages/ProtectedRoute'
 import PublicRoute from './pages/PublicRoute'
 import NotFound from './components/shared/NotFound'
 import { ROLES } from './helper/constants'
+import SignupSuccess from './pages/SignupSuccess'
+
 import DataCompletedRoute from './pages/DataCompletedRoute'
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
       <TopBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/signupsuccess" element={<SignupSuccess />}/>
         <Route
           path="login"
           element={
