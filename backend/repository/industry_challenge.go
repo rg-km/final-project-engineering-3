@@ -186,3 +186,20 @@ func (icr *IndustryChallengeRepository) GetAllChallenges() ([]ResearchChallengeI
 
 	return researchChallenges, nil
 }
+
+func (icr *IndustryChallengeRepository) GetGuideFileLocation(challengeId int) (*string, error) {
+	var sqlStatement string
+	var guideFileLocation string
+
+	sqlStatement = `
+		SELECT guide_file FROM research_item WHERE id = ?
+	`
+
+	row := icr.db.QueryRow(sqlStatement, challengeId)
+	err := row.Scan(&guideFileLocation)
+	if err != nil {
+		return nil, err
+	}
+
+	return &guideFileLocation, nil
+}

@@ -7,11 +7,11 @@ import useFetchData from '../hooks/useFetchData'
 import useUserStore from '../store/useUserStore'
 
 function MitraProfile() {
-  const { data, isFetching } = useFetchData(null, '/industry/profile')
+  const { response, isFetching } = useFetchData(null, '/industry/profile')
   const user = useUserStore((state) => state.user)
   const logout = useUserStore((state) => state.logout)
 
-  if (isFetching || !data) return <Spinner className="w-10 h-10 mt-10" />
+  if (isFetching || !response?.data) return <Spinner className="w-10 h-10 mt-10" />
 
   return (
     <div className="container">
@@ -23,7 +23,6 @@ function MitraProfile() {
             </div>
             <div className="mt-2 space-y-2 text-center lg:text-left">
               <div className="text-xl font-semibold">{user?.username}</div>
-              <div className="text-sm">email</div>
             </div>
             <div className="flex gap-x-3">
               <Link
@@ -46,28 +45,28 @@ function MitraProfile() {
           <div className="flex flex-col mt-5 divide-y-2 space-y-3">
             <div className="py-2">
               <div className="text-xl font-semibold">Nama Perusahaan</div>
-              <div className="text-gray-500">P{data.name}</div>
+              <div className="text-gray-500">{response.data.name}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Alamat Perusahaan</div>
-              <div className="text-gray-500">{data.address}</div>
+              <div className="text-gray-500">{response.data.address}</div>
             </div>
             <div className="py-2">
               <Accordion title={'Deskripsi Industri'} isOpen={true}>
-                <p>{data.description}</p>
+                <p className="text-gray-500">{response.data.description}</p>
               </Accordion>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Bidang / Kategori</div>
-              <div className="text-gray-500">{data.industry_category}</div>
+              <div className="text-gray-500">{response.data.industry_category}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Jumlah Pegawai</div>
-              <div className="text-gray-500">{data.num_of_employees}</div>
+              <div className="text-gray-500">{response.data.num_of_employees}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">No. Telp</div>
-              <div className="text-gray-500">{data.phone_number}</div>
+              <div className="text-gray-500">{response.data.phone_number}</div>
             </div>
           </div>
         </div>

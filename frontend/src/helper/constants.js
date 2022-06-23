@@ -3,6 +3,12 @@ export const ROLES = {
   Researcher: 'researcher',
 }
 
+export const APPROVAL_STATUS = {
+  Pending: 1,
+  Approved: 2,
+  Rejected: 3,
+}
+
 export const MITRA_CATEGORIES = [
   {
     id: 1,
