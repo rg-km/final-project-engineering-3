@@ -2,6 +2,15 @@ package repository
 
 import "time"
 
+type User struct {
+	ID         int64  `json:"id"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	Email      string `json:"email"`
+	RoleID     int64  `json:"role_id"`
+	IsLoggedin bool   `json:"is_logged_in"`
+}
+
 type IndustryProfile struct {
 	Id               int64  `json:"id"`
 	Name             string `json:"name"`

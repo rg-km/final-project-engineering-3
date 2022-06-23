@@ -12,6 +12,7 @@ import (
 
 type EditSuccessResponse struct {
 	Status string                      `json:"status"`
+	User   *repository.User            `json:"user"`
 	Data   *repository.IndustryProfile `json:"data"`
 }
 
@@ -31,6 +32,7 @@ type IndustryProfileRequest struct {
 
 func (api *API) getIndustryProfile(w http.ResponseWriter, r *http.Request) {
 	api.AllowOrigin(w, r)
+
 	username := r.Context().Value("username")
 	var userId *int64
 	userId, err := api.usersRepo.FetchUserIdByUsername(username.(string))
@@ -53,9 +55,17 @@ func (api *API) getIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user, err := api.usersRepo.GetUserById(*userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(EditSuccessResponse{
 		Status: "Success",
+		User:   user,
 		Data:   profileData,
 	})
 }
