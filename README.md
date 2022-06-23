@@ -71,7 +71,7 @@ http://localhost:8080/
 - `POST` : `/researcher/challenge/apply?challenge_id=<challenge_id>`
 - `POST` : `/researcher/challenge/upload?proposal_id=<proposal_id>`
 - `POST` : `/researcher/profile/add`
-- `GET`  : `/researcher/chalange/list`
+- `GET`  : `/researcher/challenge/list`
 - `GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
 
 API documentation can be found at <link-to-postman-api.com>
