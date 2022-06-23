@@ -3,6 +3,7 @@ import { FaUserCircle } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import useUserStore from '../../store/useUserStore'
 import MitraNavigation from '../navigation/MitraNavigation'
+import ResearcherNavigation from '../navigation/ResearcherNavigation'
 
 function TopBar() {
   const user = useUserStore((state) => state.user)
@@ -27,7 +28,7 @@ function TopBar() {
   return (
     <div className="w-full bg-black p-6 flex justify-end items-center space-x-5">
       <div className="flex space-x-5  ">
-        {user?.role === 'industry' ? <MitraNavigation /> : null}
+        {user?.role === 'industry' ? <MitraNavigation /> : <ResearcherNavigation />}
       </div>
       <div className="relative">
         <button
