@@ -76,14 +76,20 @@ func (ipr *IndustryProfileRepository) EditIndustryProfile(name string, address s
 	var sqlStatement string
 	var industryProfile IndustryProfile
 
+	tx, err := ipr.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
 	sqlStatement = `
 		UPDATE industry_profile
 		SET name = ?, address = ?, description = ?, industry_category_id = ?, num_of_employees = ?, phone_number = ?, logo = ?, updated_at = ?
 		WHERE id = ?
 	`
 
-	_, err := ipr.db.Exec(sqlStatement, name, address, description, industryCategoryId, numOfEmployees, phoneNumber, logo, time.Now().Format("2006-01-02 15:04:05"), profileId)
+	_, err = ipr.db.Exec(sqlStatement, name, address, description, industryCategoryId, numOfEmployees, phoneNumber, logo, time.Now().Format("2006-01-02 15:04:05"), profileId)
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
@@ -102,7 +108,7 @@ func (ipr *IndustryProfileRepository) EditIndustryProfile(name string, address s
 			, p.updated_at
 		FROM industry_profile p
 		INNER JOIN industry_category c ON p.industry_category_id = c.id
-		WHERE p.user_id = ?
+		WHERE p.id = ?
 	`
 
 	row := ipr.db.QueryRow(sqlStatement, profileId)
@@ -121,6 +127,7 @@ func (ipr *IndustryProfileRepository) EditIndustryProfile(name string, address s
 	)
 
 	if err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 

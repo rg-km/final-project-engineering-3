@@ -6,8 +6,15 @@ function PublicRoute({ children }) {
   const user = useUserStore((state) => state.user)
   const location = useLocation()
 
-  const defaultRedirect = user?.role === ROLES.Mitra ? '/posted-challenges' : '/challenges'
-  const from = location.state?.from?.pathname || defaultRedirect
+  const getDRedirectPath = () => {
+    const dataCompeletePath = user?.role === ROLES.Mitra ? '/posted-challenges' : '/challenges'
+    const dataNotCompletePath =
+      user?.role === ROLES.Mitra ? '/mitra/information' : '/researcher/information'
+
+    return user?.isDataComplete ? dataCompeletePath : dataNotCompletePath
+  }
+
+  const from = location.state?.from?.pathname || getDRedirectPath()
 
   if (user) return <Navigate to={from} />
   return children

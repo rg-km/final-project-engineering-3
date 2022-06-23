@@ -1,17 +1,37 @@
 import React from 'react'
 import { useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
+import axiosClient from '../../config/axiosClient'
+import Spinner from '../shared/Spinner'
 
-function FormChallenge({ previous }) {
+function FormChallenge({ previous, timePeriod }) {
+  const navigate = useNavigate()
+
   const [filename, setFilename] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-    const data = Object.fromEntries(formData.entries())
+    formData.append('period_start', new Date(timePeriod.startDate).toISOString())
+    formData.append('period_end', new Date(timePeriod.endDate).toISOString())
 
-    console.log(data)
+    try {
+      setIsLoading(true)
+      const { data } = await axiosClient.post('industry/challenge/post', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      console.log(data)
+      setIsLoading(false)
+      navigate('/posted-challenges')
+    } catch (err) {
+      setIsLoading(false)
+      console.error(err)
+    }
   }
 
   return (
@@ -21,38 +41,32 @@ function FormChallenge({ previous }) {
           <label htmlFor="">Nama Research</label>
           <input
             type="text"
-            placeholder="Nama research"
             className="py-2 border-b border-black outline-none  focus:border-blue-700"
             name="name"
+            required
           />
         </div>
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">Bidang Research</label>
           <select
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700 outline-none"
-            name="research_category_id"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700 outline-none"
+            name="research_category"
           >
-            <option value="Descriptive">Descriptive</option>
-            <option value="Exploratory">Exploratory</option>
-            <option value="Corelational">Corelational</option>
-            <option value="Explanatory">Explanatory</option>
+            <option value="1">Descriptive</option>
+            <option value="2">Exploratory</option>
+            <option value="3">Corelational</option>
+            <option value="3">Explanatory</option>
           </select>
         </div>
         <div className="space-y-3 flex flex-col">
-          <label htmlFor="">Periode</label>
-          <div className="flex space-x-5 items-center mt-10">
-            <input
-              type="date"
-              className="border border-black p-2 focus:border-blue-700 outline-none"
-              name="period_start"
-            />
-            <div>-</div>
-            <input
-              type="date"
-              className="border border-black p-2 focus:border-blue-700 outline-none"
-              name="period_end"
-            />
-          </div>
+          <label htmlFor="">Kuota Pendaftar</label>
+          <input
+            type="number"
+            min={0}
+            className="py-2 border-b border-black outline-none  focus:border-blue-700"
+            name="quota"
+            required
+          />
         </div>
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">Dana Funding</label>
@@ -61,9 +75,11 @@ function FormChallenge({ previous }) {
             <input
               type="number"
               min={0}
-              placeholder="Nama Research"
+              max={Infinity}
               className="border border-black p-2 outline-none focus:border-blue-700"
               name="max_funding"
+              defaultValue={0}
+              required
             />
           </div>
         </div>
@@ -72,7 +88,7 @@ function FormChallenge({ previous }) {
           <textarea
             className="resize-none border border-black outline-none p-2 focus:border-blue-700"
             rows={5}
-            placeholder="Rincian kegiatan"
+            required
             name="details"
           ></textarea>
         </div>
@@ -96,14 +112,24 @@ function FormChallenge({ previous }) {
                   className="opacity-0 absolute inset-0 focus:border-blue-700"
                   name="guide_file"
                   onChange={(e) => setFilename(e.target.files[0].name)}
+                  required
                 />
               </div>
             </div>
           </div>
         </div>
         <div className="flex mt-10">
-          <button className="w-full text-white py-2 bg-blue-700" type="submit">
-            Post Challenge
+          <button
+            className="w-full text-white py-3 bg-blue-700 hover:bg-blue-800 relative"
+            type="submit"
+            disabled={isLoading}
+          >
+            <span className={isLoading ? 'opacity-0' : ''}>Post Challenge</span>
+            {isLoading && (
+              <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
+                <Spinner />
+              </div>
+            )}
           </button>
         </div>
       </form>

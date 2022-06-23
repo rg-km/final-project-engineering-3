@@ -16,6 +16,9 @@ import ProtectedRoute from './pages/ProtectedRoute'
 import PublicRoute from './pages/PublicRoute'
 import NotFound from './components/shared/NotFound'
 import { ROLES } from './helper/constants'
+import SignupSuccess from './pages/SignupSuccess'
+
+import DataCompletedRoute from './pages/DataCompletedRoute'
 
 function App() {
   return (
@@ -23,6 +26,7 @@ function App() {
       <TopBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/signupsuccess" element={<SignupSuccess />}/>
         <Route
           path="login"
           element={
@@ -42,7 +46,9 @@ function App() {
 
         {/* Mitra Routes */}
         <Route element={<ProtectedRoute role={ROLES.Mitra} />}>
-          <Route path="add-challenge" element={<PostChallenge />} />
+          <Route element={<DataCompletedRoute />}>
+            <Route path="add-challenge" element={<PostChallenge />} />
+          </Route>
           <Route path="posted-challenges">
             <Route index element={<MitraChallenges />} />
             <Route path=":challengeId">
@@ -52,7 +58,9 @@ function App() {
           </Route>
           <Route path="mitra">
             <Route path="information" element={<MitraInformation />} />
-            <Route path="profile" element={<MitraProfile />} />
+            <Route element={<DataCompletedRoute />}>
+              <Route path="profile" element={<MitraProfile />} />
+            </Route>
           </Route>
         </Route>
 
