@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -12,7 +13,6 @@ import (
 
 type EditSuccessResponse struct {
 	Status string                      `json:"status"`
-	User   *repository.User            `json:"user"`
 	Data   *repository.IndustryProfile `json:"data"`
 }
 
@@ -30,9 +30,17 @@ type IndustryProfileRequest struct {
 	Logo               string `json:"logo"`
 }
 
+type IndustryProfileErrorDetailResponse struct {
+	Name    string `json:"name"`
+	Message string `json:"message"`
+}
+
+type IndustryProfileErrorResponse struct {
+	Error IndustryProfileErrorDetailResponse `json:"error"`
+}
+
 func (api *API) getIndustryProfile(w http.ResponseWriter, r *http.Request) {
 	api.AllowOrigin(w, r)
-
 	username := r.Context().Value("username")
 	var userId *int64
 	userId, err := api.usersRepo.FetchUserIdByUsername(username.(string))
@@ -55,17 +63,9 @@ func (api *API) getIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := api.usersRepo.GetUserById(*userId)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
-		return
-	}
-
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(EditSuccessResponse{
 		Status: "Success",
-		User:   user,
 		Data:   profileData,
 	})
 }
@@ -182,4 +182,32 @@ func (api *API) editIndustryProfile(w http.ResponseWriter, r *http.Request) {
 		Status: "Success",
 		Data:   profileData,
 	})
+}
+
+func (api *API) getIndustryLogo(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	fileName := r.URL.Query().Get("file_name")
+	if fileName == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(IndustryProfileErrorResponse{Error: IndustryProfileErrorDetailResponse{
+			Name: "Require file_name",
+			Message: "file_name is required",
+		}})
+		return
+	}
+
+	file, err := os.Open(fileName)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(IndustryProfileErrorResponse{Error: IndustryProfileErrorDetailResponse{
+			Name: "Invalid file",
+			Message: "Invalid file",
+		}})
+	}
+	
+	defer file.Close()
+
+	w.Header().Set("Content-Type", "image/jpeg")
+	io.Copy(w, file)
 }
