@@ -59,6 +59,7 @@ http://localhost:8080/
 - `POST` : `/industry/challenge/post`
 - `PUT`  : `/industry/challenge/edit?challenge_id=<challenge_id>`
 - `DEL`  : `/industry/challenge/delete?challenge_id=<challenge_id>`
+- `GET`  : `/industry/challenge/list`
 - `GET`  : `/industry/challenge/review/challengers?challenge_id=<challenge_id>`
 - `GET`  : `/industry/challenge/review/details/?review_id=<review_id>`
 - `POST` : `/industry/challenge/review/details/approval?review_id=<review_id>`
