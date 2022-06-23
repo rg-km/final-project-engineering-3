@@ -23,7 +23,6 @@ function MitraProfile() {
             </div>
             <div className="mt-2 space-y-2 text-center lg:text-left">
               <div className="text-xl font-semibold">{user?.username}</div>
-              <div className="text-sm">email</div>
             </div>
             <div className="flex gap-x-3">
               <Link
@@ -46,7 +45,7 @@ function MitraProfile() {
           <div className="flex flex-col mt-5 divide-y-2 space-y-3">
             <div className="py-2">
               <div className="text-xl font-semibold">Nama Perusahaan</div>
-              <div className="text-gray-500">P{response.data.name}</div>
+              <div className="text-gray-500">{response.data.name}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Alamat Perusahaan</div>
@@ -54,7 +53,7 @@ function MitraProfile() {
             </div>
             <div className="py-2">
               <Accordion title={'Deskripsi Industri'} isOpen={true}>
-                <p>{response.data.description}</p>
+                <p className="text-gray-500">{response.data.description}</p>
               </Accordion>
             </div>
             <div className="py-2">
