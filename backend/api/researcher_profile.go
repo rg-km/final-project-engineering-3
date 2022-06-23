@@ -10,6 +10,7 @@ import (
 type ResearcherProfileSuccessResponse struct {
 	Status  string                        `json:"status"`
 	Message string                        `json:"message"`
+	User    *repository.User              `json:"user"`
 	Data    *repository.ResearcherProfile `json:"data"`
 	ID      int64                         `json:"profile_id"`
 }
@@ -49,9 +50,19 @@ func (api *API) getResearcherProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user, err := api.usersRepo.GetUserById(*userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(EditErrorResponse{Error: err.Error()})
+		return
+	}
+
 	response := ResearcherProfileSuccessResponse{
-		Status: "success",
-		Data:   researcherProfile,
+		Status:  "success",
+		Message: "Get success",
+		User:    user,
+		Data:    researcherProfile,
+		ID:      researcherProfile.Id,
 	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
