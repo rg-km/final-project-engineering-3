@@ -19,15 +19,17 @@ import { ROLES } from './helper/constants'
 import SignupSuccess from './pages/SignupSuccess'
 
 import DataCompletedRoute from './pages/DataCompletedRoute'
+import SuccessDialog from './components/shared/SuccessDialog'
 import Footer from './components/homepage/Footer'
 
 function App() {
   return (
     <div className="App">
+      <SuccessDialog />
       <TopBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/signupsuccess" element={<SignupSuccess />}/>
+        <Route path="/signupsuccess" element={<SignupSuccess />} />
         <Route
           path="login"
           element={
@@ -78,7 +80,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </div>
   )
 }
