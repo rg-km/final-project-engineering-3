@@ -3,12 +3,14 @@ import { MdArrowBackIos } from 'react-icons/md'
 import { useState } from 'react'
 import axiosClient from '../../config/axiosClient'
 import { useNavigate, useParams } from 'react-router-dom'
+import useDialogStore from '../../store/useDialogStore'
 
 const UploadBerkas = ({ changeStep }) => {
   const [proposalFileName, setProposalFileName] = useState('')
   const [optionalFileName, setOptionalFileName] = useState('')
   const { challengeId } = useParams()
   const navigate = useNavigate()
+  const { openDialog } = useDialogStore()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -28,8 +30,28 @@ const UploadBerkas = ({ changeStep }) => {
           },
         },
       )
-      navigate('/challenges')
+      openDialog(
+        {
+          title: 'Berhasil',
+          message: 'Terima kasih telah mengirim proposal',
+        },
+        () => {
+          navigate('/challenges')
+        },
+      )
     } catch (err) {
+      const response = err.response?.data
+      if (response) {
+        openDialog(
+          {
+            title: 'Gagal',
+            message: 'Anda sudah mengajukan proposal pada challenge ini',
+          },
+          () => {
+            navigate('/challenges')
+          },
+        )
+      }
       console.error(err)
     }
   }

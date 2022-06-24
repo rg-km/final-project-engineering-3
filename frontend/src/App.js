@@ -19,6 +19,7 @@ import { ROLES } from './helper/constants'
 import SignupSuccess from './pages/SignupSuccess'
 
 import DataCompletedRoute from './pages/DataCompletedRoute'
+import SuccessDialog from './components/shared/SuccessDialog'
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
       <TopBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/signupsuccess" element={<SignupSuccess />}/>
+        <Route path="/signupsuccess" element={<SignupSuccess />} />
         <Route
           path="login"
           element={
@@ -77,6 +78,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <SuccessDialog />
     </div>
   )
 }
