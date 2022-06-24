@@ -19,7 +19,8 @@ import { ROLES } from './helper/constants'
 import SignupSuccess from './pages/SignupSuccess'
 
 import DataCompletedRoute from './pages/DataCompletedRoute'
-
+import FormPeneliti from './pages/FormPeneliti'
+import ResearcherProfile from './pages/ResearcherProfile'
 function App() {
   return (
     <div className="App">
@@ -74,6 +75,14 @@ function App() {
           </Route>
           <Route path="proposal-status" element={<PengajuanProposal />} />
         </Route>
+
+        <Route path="researcher">
+          <Route path="information" element={<FormPeneliti />} />
+              <Route element={<DataCompletedRoute />}>
+              <Route path="profile" element={<ResearcherProfile />} />
+          </Route>
+        </Route>
+
 
         <Route path="*" element={<NotFound />} />
       </Routes>
