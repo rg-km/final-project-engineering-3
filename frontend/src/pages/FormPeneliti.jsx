@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BANK_NAME } from '../helper/constants'
@@ -16,8 +15,6 @@ const FormPeneliti = () => {
   const { response } = useFetchData(null, '/researcher/profile')
 
   const [isLoading, setIsLoading] = useState(false)
-  const [filename, setFilename] = useState('')
-
   const [defaultBank, setDefaultBank] = useState(0)
 
   useEffect(() => {
@@ -66,6 +63,7 @@ const FormPeneliti = () => {
             type="text"
             className="py-2 border-b border-black outline-none  focus:border-blue-700"
             name="team_name"
+            required
             defaultValue={response?.data?.team_name}
           />
         </div>
