@@ -1,21 +1,24 @@
 import { MdOutlineArrowForwardIos } from 'react-icons/md'
 import { AiOutlineUser } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
+import { convertISODate } from '../../helper/utils'
 
-function ChallengeCard() {
+function ChallengeCard({ challenge }) {
   return (
     <div className="border-2 bg-gray-100 rounded-md p-3 grid grid-cols-[1fr_2fr] md:grid-cols-[1fr_6fr_1fr] gap-3">
       <div className="flex items-center justify-center">
         <AiOutlineUser fontSize={56} />
       </div>
-      <div>
-        <div className="text-lg md:text-2xl font-semibold">Nama research</div>
-        <div className="text-xs md:text-sm">Bidang research</div>
-        <div className="text-xs md:text-sm">Nama mitra</div>
-        <div className="text-xs md:text-sm">Periode</div>
+      <div className="space-y-1">
+        <div className="text-lg md:text-2xl font-semibold">{challenge.name}</div>
+        <div className="text-xs md:text-sm">{challenge.research_category}</div>
+        <div className="text-xs md:text-sm">{challenge.industry_name}</div>
+        <div className="text-xs md:text-sm">
+          {convertISODate(challenge.period_start)} - {convertISODate(challenge.period_end)}
+        </div>
       </div>
       <div className="hidden md:flex items-center justify-center">
-        <Link to="somethingId">
+        <Link to={`${challenge.id}`}>
           <MdOutlineArrowForwardIos fontSize={48} />
         </Link>
       </div>
