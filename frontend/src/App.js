@@ -19,6 +19,7 @@ import { ROLES } from './helper/constants'
 import SignupSuccess from './pages/SignupSuccess'
 
 import DataCompletedRoute from './pages/DataCompletedRoute'
+import Footer from './components/homepage/Footer'
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer/>
     </div>
   )
 }
