@@ -66,6 +66,14 @@ func (api *API) addResearcherProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	username := r.Context().Value("username")
+
+	userId, err := api.usersRepo.FetchUserIdByUsername(username.(string))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ResearcherProfileErrorResponse{Error: err.Error()})
+	}
+
 	var profileId *int64
 	profileId, err = api.researcherProfileRepo.AddResearcherProfile(
 		researcherProfile.TeamName,
@@ -76,7 +84,7 @@ func (api *API) addResearcherProfile(w http.ResponseWriter, r *http.Request) {
 		researcherProfile.Address,
 		researcherProfile.BankAccountNum,
 		researcherProfile.BankName,
-		researcherProfile.UserId,
+		*userId,
 	)
 
 	if err != nil {

@@ -2,18 +2,10 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
-
-type User struct {
-	ID         int64  `json:"id"`
-	Username   string `json:"username"`
-	Password   string `json:"password"`
-	Email      string `json:"email"`
-	RoleID     int64  `json:"role_id"`
-	IsLoggedin bool   `json:"is_loggedin"`
-}
 
 type UserRepository struct {
 	db *sql.DB
@@ -86,6 +78,21 @@ func (u *UserRepository) FetchUserIdByUsername(username string) (*int64, error) 
 	return &id, nil
 }
 
+func (u *UserRepository) FetchIndustryIdByUserId(userId int64) (*int64, error) {
+	var sqlStatement string
+	var id int64
+
+	sqlStatement = "SELECT id FROM industry_profile WHERE user_id = ?"
+
+	row := u.db.QueryRow(sqlStatement, userId)
+	err := row.Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
+}
+
 func (u *UserRepository) Register(username, password, email string, role_id int64) (*int64, error) {
 	var sqlStatement string
 	var id int64
@@ -115,10 +122,41 @@ func (u *UserRepository) Register(username, password, email string, role_id int6
 			tx.Rollback()
 			return nil, err
 		}
+	} else if role_id == 3 {
+		sqlStatement = `INSERT INTO researcher_profile (user_id) VALUES (?)`
+		_, err = tx.Exec(sqlStatement, id)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
 	}
 
 	tx.Commit()
 	return &id, nil
+}
+
+func (u *UserRepository) GetUserById(userId int64) (*User, error) {
+	var sqlStatement string
+	var user User
+
+	sqlStatement = `
+		SELECT id, username, password, email, role_id, is_logged_in
+		FROM user
+		WHERE id = ?
+	`
+	res := u.db.QueryRow(sqlStatement, userId)
+	err := res.Scan(
+		&user.ID,
+		&user.Username,
+		&user.Password,
+		&user.Email,
+		&user.RoleID,
+		&user.IsLoggedin,
+	)
+
+	fmt.Println(err)
+
+	return &user, nil
 }
 
 func (u *UserRepository) Logout(userId int64) (*bool, error) {
