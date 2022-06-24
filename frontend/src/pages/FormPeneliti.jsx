@@ -31,14 +31,12 @@ const FormPeneliti = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+    
     const formData = new FormData(e.currentTarget)
+    const values = Object.fromEntries(formData.entries());
     try {
       setIsLoading(true)
-      await axiosClient.put('/researcher/profile/edit', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      await axiosClient.put('/researcher/profile/edit', values, {
       })
       setIsLoading(false)
       navigate('/challenges')
