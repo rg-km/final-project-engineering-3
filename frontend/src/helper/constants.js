@@ -9,6 +9,12 @@ export const APPROVAL_STATUS = {
   Rejected: 3,
 }
 
+export const APPROVAL_STATUS_NAME = {
+  Pending: 'Reviewed',
+  Approved: 'Funded',
+  Rejected: 'Rejected',
+}
+
 export const MITRA_CATEGORIES = [
   {
     id: 1,
