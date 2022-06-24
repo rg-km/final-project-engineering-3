@@ -1,50 +1,39 @@
 import React from 'react'
 import ChallangeListItem from '../components/shared/ChallangeListItem'
-import { useState } from 'react'
+import useFetchData from '../hooks/useFetchData'
+import { HiOutlineEmojiSad } from 'react-icons/hi'
+import Spinner from '../components/shared/Spinner'
 
 const ChallangeList = () => {
-const [challangeListItem, setChallangeListItem] = useState([
-    {
-        namaResearch: 'nama research 1',
-        bidang: 'bidang 1',
-        namaMitra: 'nama mitra 1',
-        periode: '2022 - 2025'
-    },
-    {
-        namaResearch: 'nama research 2',
-        bidang: 'bidang 2',
-        namaMitra: 'nama mitra 2',
-        periode: '2022 - 2026'
-    }
-])
+  const { response, isFetching } = useFetchData(null, 'researcher/challenge/list')
 
-// const getChallangeListItem = () =>{
-//     setChallangeListItem([
-//         {
-//             namaResearch: 'nama research 1',
-//             bidang: 'bidang 1',
-//             namaMitra: 'nama mitra 1',
-//             periode: 2022 - 2025
-//         }
-//     ])
-// }
-
-
-return (
-<div className='container'>
-    <h1 className="text-2xl font-semibold">Challange</h1>
-    <p className='pt-4 text-slate-500'>Yuk cari Challange yang cocok untuk kalian !</p>
-    {challangeListItem.map(item =>{
-        return <ChallangeListItem
-        key = {item.id}
-        namaResearch = {item.namaResearch}
-        bidang = {item.bidang}
-        namaMitra = {item.namaMitra}
-        periode = {item.periode}
-        />
-    })}
-</div>
-)
+  if (isFetching) return <Spinner className="mt-10 h-10 w-10" />
+  return (
+    <div className="container">
+      <h1 className="text-2xl font-semibold">Challange</h1>
+      <p className="pt-4 text-slate-500">Yuk cari Challange yang cocok untuk kalian !</p>
+      {response &&
+        response.map((item) => {
+          return (
+            <ChallangeListItem
+              key={item.id}
+              id={item.id}
+              namaResearch={item.name}
+              bidang={item.research_category}
+              namaMitra={item.industry_name}
+              periodeStart={item.period_start}
+              periodeEnd={item.period_end}
+            />
+          )
+        })}
+      {response === null && (
+        <div className="mx-auto mt-10 flex flex-col items-center">
+          <HiOutlineEmojiSad fontSize={64} />
+          <p className="mt-2">Belum ada Challenge dari Mitra</p>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default ChallangeList
