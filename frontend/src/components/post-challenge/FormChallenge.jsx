@@ -113,6 +113,7 @@ function FormChallenge({ previous, timePeriod }) {
                   name="guide_file"
                   onChange={(e) => setFilename(e.target.files[0].name)}
                   required
+                  accept=".pdf"
                 />
               </div>
             </div>

@@ -21,6 +21,8 @@ import SignupSuccess from './pages/SignupSuccess'
 import DataCompletedRoute from './pages/DataCompletedRoute'
 import FormPeneliti from './pages/FormPeneliti'
 import ResearcherProfile from './pages/ResearcherProfile'
+import Footer from './components/homepage/Footer'
+
 function App() {
   return (
     <div className="App">
@@ -86,6 +88,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer/>
     </div>
   )
 }

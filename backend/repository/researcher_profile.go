@@ -70,17 +70,17 @@ func (rpr *ResearcherProfileRepository) AddResearcherProfile(teamName string, le
 	var lastId int64
 
 	sqlStatement = `
-		INSERT INTO researcher_profile (
-			team_name,
-			leader_name,
-			phone_number,
-			nidn,
-			collage_name,
-			address,
-			bank_account_num,
-			bank_name,
-			user_id
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+		UPDATE researcher_profile
+		SET
+			team_name = ?,
+			leader_name = ?,
+			phone_number = ?,
+			nidn = ?,
+			collage_name = ?,
+			address = ?,
+			bank_account_num = ?,
+			bank_name = ?
+		WHERE user_id = ?
 	`
 
 	res, err := rpr.db.Exec(sqlStatement, teamName, leaderName, phoneNumber, nidn, collageName, address, bankAccountNumber, bankName, userId)
