@@ -55,7 +55,7 @@ func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository
 
 	// API with AuthMiddleware and ResearcherMiddleware
 	mux.Handle("/researcher/profile", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProfile)))))
-	mux.Handle("/researcher/profile/edit", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.addResearcherProfile)))))
+	mux.Handle("/researcher/profile/edit", api.PUT(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.addResearcherProfile)))))
 	mux.Handle("/researcher/proposal", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherProposalStatus)))))
 	mux.Handle("/researcher/challenge/list", api.GET(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.getResearcherChallenges)))))
 	mux.Handle("/researcher/challenge/apply", api.POST(api.AuthMiddleware(api.ResearcherMiddleware(http.HandlerFunc(api.applyResearchProposal)))))
