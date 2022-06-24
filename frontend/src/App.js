@@ -20,10 +20,12 @@ import SignupSuccess from './pages/SignupSuccess'
 
 import DataCompletedRoute from './pages/DataCompletedRoute'
 import SuccessDialog from './components/shared/SuccessDialog'
+import Footer from './components/homepage/Footer'
 
 function App() {
   return (
     <div className="App">
+      <SuccessDialog />
       <TopBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -78,7 +80,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <SuccessDialog />
+      <Footer />
     </div>
   )
 }
