@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "use-axios-client": "^2.0.0"
+  }
+}
