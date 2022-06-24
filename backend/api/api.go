@@ -19,6 +19,7 @@ type API struct {
 
 func NewApi(usersRepo repository.UserRepository, industryProfilesRepo repository.IndustryProfileRepository, researcherProfileRepo repository.ResearcherProfileRepository, researchProposalRepo repository.ResearchProposalRepository, industryChallengeRepo repository.IndustryChallengeRepository, proposalReviewRepo repository.ProposalReviewRepository) API {
 	mux := http.NewServeMux()
+
 	api := API{
 		usersRepo,
 		industryProfilesRepo,
@@ -71,5 +72,8 @@ func (api *API) Handler() *http.ServeMux {
 
 func (api *API) Start() {
 	fmt.Println("starting web server at http://localhost:8080/")
-	http.ListenAndServe(":8080", api.Handler())
+	server := new(http.Server)
+	server.Addr = ":8080"
+	server.Handler = Logger(api.Handler())
+	server.ListenAndServe()
 }
