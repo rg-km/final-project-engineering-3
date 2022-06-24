@@ -122,6 +122,13 @@ func (u *UserRepository) Register(username, password, email string, role_id int6
 			tx.Rollback()
 			return nil, err
 		}
+	} else if role_id == 3 {
+		sqlStatement = `INSERT INTO researcher_profile (user_id) VALUES (?)`
+		_, err = tx.Exec(sqlStatement, id)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
 	}
 
 	tx.Commit()
