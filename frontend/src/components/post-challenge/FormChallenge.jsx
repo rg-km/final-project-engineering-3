@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import axiosClient from '../../config/axiosClient'
+import useDialogStore from '../../store/useDialogStore'
 import Spinner from '../shared/Spinner'
 
 function FormChallenge({ previous, timePeriod }) {
@@ -10,6 +11,7 @@ function FormChallenge({ previous, timePeriod }) {
 
   const [filename, setFilename] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { openDialog } = useDialogStore()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,7 +29,15 @@ function FormChallenge({ previous, timePeriod }) {
       })
       console.log(data)
       setIsLoading(false)
-      navigate('/posted-challenges')
+      openDialog(
+        {
+          title: 'Berhasil',
+          message: 'Challenge berhasil dibuat',
+        },
+        () => {
+          navigate('/posted-challenges')
+        },
+      )
     } catch (err) {
       setIsLoading(false)
       console.error(err)

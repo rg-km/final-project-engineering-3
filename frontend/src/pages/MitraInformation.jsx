@@ -6,13 +6,14 @@ import useFetchData from '../hooks/useFetchData'
 import { MITRA_CATEGORIES } from '../helper/constants'
 import useUserStore from '../store/useUserStore'
 import { useEffect } from 'react'
+import useDialogStore from '../store/useDialogStore'
 
 function MitraInformation() {
   const navigate = useNavigate()
 
   const user = useUserStore((state) => state.user)
   const setUser = useUserStore((state) => state.setUser)
-
+  const { openDialog } = useDialogStore()
   const { response } = useFetchData(null, '/industry/profile')
 
   const [isLoading, setIsLoading] = useState(false)
@@ -44,7 +45,15 @@ function MitraInformation() {
         },
       })
       setIsLoading(false)
-      navigate('/posted-challenges')
+      openDialog(
+        {
+          title: 'Berhasil',
+          message: 'Data berhasil disimpan',
+        },
+        () => {
+          navigate('/posted-challenges')
+        },
+      )
       setUser({ ...user, isDataComplete: true })
     } catch (err) {
       setIsLoading(false)
