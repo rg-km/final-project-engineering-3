@@ -6,6 +6,11 @@ import Spinner from '../components/shared/Spinner'
 import useFetchData from '../hooks/useFetchData'
 import useUserStore from '../store/useUserStore'
 
+const createImageURL = (pathname) => {
+  const base = 'http://localhost:8080/industry/logo?file_name='
+  return `${base}${pathname.replace('\\', '/')}`
+}
+
 function MitraProfile() {
   const { response, isFetching } = useFetchData(null, '/industry/profile')
   const user = useUserStore((state) => state.user)
@@ -19,7 +24,14 @@ function MitraProfile() {
         <div className="space-y-6">
           <div className="bg-gray-100 p-5 rounded-md flex flex-col justify-center items-center lg:items-start">
             <div>
-              <AiOutlineUser fontSize={64} />
+              {response.data.logo !== '' ? (
+                <img
+                  src={createImageURL(response.data.logo)}
+                  className="w-40 h-40 object-center object-cover rounded-md"
+                />
+              ) : (
+                <AiOutlineUser fontSize={64} />
+              )}
             </div>
             <div className="mt-2 space-y-2 text-center lg:text-left">
               <div className="text-xl font-semibold">{user?.username}</div>
