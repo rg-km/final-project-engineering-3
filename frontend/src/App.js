@@ -78,17 +78,16 @@ function App() {
             </Route>
           </Route>
           <Route path="proposal-status" element={<PengajuanProposal />} />
-        </Route>
-
-        <Route path="researcher">
+          <Route path="researcher">
           <Route path="information" element={<FormPeneliti />} />
               <Route element={<DataCompletedRoute />}>
               <Route path="profile" element={<ResearcherProfile />} />
           </Route>
         </Route>
-
-
         <Route path="*" element={<NotFound />} />
+        </Route>
+
+
       </Routes>
       <Footer />
     </div>

@@ -10,6 +10,8 @@ const ResearcherProfile = () => {
     const user = useUserStore((state) => state.user)
     const logout = useUserStore((state) => state.logout)
 
+
+    console.log(response);
     if (isFetching || !response?.data) return <Spinner className="w-10 h-10 mt-10" />
     return (
     <div className="container">
@@ -24,7 +26,7 @@ const ResearcherProfile = () => {
             </div>
             <div className="flex gap-x-3">
               <Link
-                to="/mitra/information"
+                to="/researcher/information"
                 className="mt-5 text-white px-3 py-2 rounded-md bg-blue-700 hover:bg-blue-800"
               >
                 Edit Profile
@@ -42,7 +44,7 @@ const ResearcherProfile = () => {
           <h2 className="text-3xl font-semibold">Data Peneliti</h2>
           <div className="flex flex-col mt-5 divide-y-2 space-y-3">
             <div className="py-2">
-              <div className="text-xl font-semibold">Nama Ketua Tim</div>
+              <div className="text-xl font-semibold">Nama Tim</div>
               <div className="text-gray-500">{response.data.team_name}</div>
             </div>
             <div className="py-2">
@@ -58,12 +60,16 @@ const ResearcherProfile = () => {
               <div className="text-gray-500">{response.data.nidn}</div>
             </div>
             <div className="py-2">
+              <div className="text-xl font-semibold">Nama Universitas</div>
+              <div className="text-gray-500">{response.data.college_name}</div>
+            </div>
+            <div className="py-2">
               <div className="text-xl font-semibold">Alamat</div>
               <div className="text-gray-500">{response.data.address}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">No Rekening</div>
-              <div className="text-gray-500">{response.data.address}</div>
+              <div className="text-gray-500">{response.data.bank_account_number}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Bank</div>

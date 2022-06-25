@@ -11,7 +11,6 @@ const FormPeneliti = () => {
 
   const user = useUserStore((state) => state.user)
   const setUser = useUserStore((state) => state.setUser)
-
   const { response } = useFetchData(null, '/researcher/profile')
 
   const [isLoading, setIsLoading] = useState(false)
@@ -36,9 +35,10 @@ const FormPeneliti = () => {
     const values = Object.fromEntries(formData.entries());
     try {
       setIsLoading(true)
-      await axiosClient.put('/researcher/profile/edit', values, {
+      const tes = await axiosClient.put('/researcher/profile/edit', values, {
       })
       setIsLoading(false)
+      console.log(tes.data);
       navigate('/challenges')
       setUser({ ...user, isDataComplete: true })
     } catch (error) {
@@ -75,23 +75,15 @@ const FormPeneliti = () => {
           />
         </div>
         <div className="space-y-3 flex flex-col">
-          <label htmlFor="">Nama Perguruan Tinggi</label>
-          <input
-            type="text"
-            className="py-2 border-b border-black outline-none  focus:border-blue-700"
-            name="collage_name"
-            defaultValue={response?.data?.collage_name}
-          />
-        </div>
-        <div className="space-y-3 flex flex-col">
           <label htmlFor="">No. HP Ketua Tim</label>
           <input
             type="text"
             className="py-2 border-b border-black outline-none  focus:border-blue-700"
             name="phone"
-            defaultValue={response?.data?.phone}
+            defaultValue={response?.data?.phone_number}
           />
         </div>
+
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">NIDN</label>
           <input
@@ -101,14 +93,18 @@ const FormPeneliti = () => {
             defaultValue={response?.data?.nidn}
           />
         </div>
-        {/* <div className="space-y-3 flex flex-col">
-          <label htmlFor="">Email</label>
+
+        <div className="space-y-3 flex flex-col">
+          <label htmlFor="">Nama Perguruan Tinggi</label>
           <input
-            type="email"
+            type="text"
             className="py-2 border-b border-black outline-none  focus:border-blue-700"
-            name="email"
+            name="collage_name"
+            defaultValue={response?.data?.college_name}
           />
-        </div> */}
+        </div>
+
+
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">Alamat</label>
           <input
@@ -124,7 +120,7 @@ const FormPeneliti = () => {
             type="text"
             className="py-2 border-b border-black outline-none  focus:border-blue-700"
             name="bank_account_num"
-            defaultValue={response?.data?.bank_account_num}
+            defaultValue={response?.data?.bank_account_number}
           />
         </div>
 
@@ -132,12 +128,12 @@ const FormPeneliti = () => {
             <label htmlFor="">Bank</label>
             <select
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700 outline-none"
-              name="bank_name_id"
+              name="bank_name"
               value={defaultBank}
               onChange={(e) => setDefaultBank(e.currentTarget.value)}
             >
               {BANK_NAME.map((bank) => (
-                <option value={bank.id} key={bank.id}>
+                <option value={bank.name} key={bank.id}>
                   {bank.name}
                 </option>
               ))}
