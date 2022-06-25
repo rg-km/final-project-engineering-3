@@ -81,12 +81,12 @@ function FormChallenge({ previous, timePeriod }) {
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">Dana Funding</label>
           <div>
-            <span className="p-3 border border-black">Rp.</span>
+            <span className="hidden  md:block p-3 border border-black">Rp.</span>
             <input
               type="number"
               min={0}
               max={Infinity}
-              className="border border-black p-2 outline-none focus:border-blue-700"
+              className="w-full md:w-auto border border-black p-2 outline-none focus:border-blue-700"
               name="max_funding"
               defaultValue={0}
               required
@@ -110,7 +110,7 @@ function FormChallenge({ previous, timePeriod }) {
             <div className="flex mt-2">
               <input
                 type="text"
-                className=" flex-grow border border-black outline-none px-3 focus:border-blue-700"
+                className="w-4/5 lg:grow lg:w-auto border border-black outline-none px-3 focus:border-blue-700"
                 readOnly
                 placeholder="Upload file..."
                 value={filename}

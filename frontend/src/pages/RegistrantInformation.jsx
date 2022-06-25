@@ -63,7 +63,7 @@ function RegistrantInformation() {
               <div className="text-sm">{response.researcher_profile.college_name}</div>
               <div className="text-sm">{response.researcher_profile.phone_number}</div>
             </div>
-            <div className="mt-5 w-full">
+            <div className="mt-5 w-full flex lg:block justify-center">
               {status === APPROVAL_STATUS.Pending && (
                 <div className="flex space-x-5">
                   <button

@@ -79,20 +79,20 @@ const UploadBerkas = ({ changeStep }) => {
             </div>
           </div>
 
-          <div className="pb-7">
+          <div className="w-full pb-7">
             <label htmlFor="" className="">
               Proposal :
             </label>
             <div className="flex mt-2">
               <input
                 type="text"
-                className=" flex-grow border border-black outline-none px-3 "
+                className="w-4/5 lg:grow lg:w-auto border border-black outline-none px-3 "
                 readOnly
                 placeholder="proposal.pdf"
                 value={proposalFileName}
               />
               <div className="relative p-1 px-3 bg-sky-700 text-white cursor-pointer ">
-                <span>Submit</span>
+                <button>Submit</button>
                 <input
                   type="file"
                   className="opacity-0 absolute inset-0 focus:border-black"
@@ -112,7 +112,7 @@ const UploadBerkas = ({ changeStep }) => {
             <div className="flex mt-2">
               <input
                 type="text"
-                className=" flex-grow border border-black outline-none px-3 "
+                className="w-4/5 lg:grow lg:w-auto border border-black outline-none px-3 "
                 readOnly
                 placeholder="Abstract.pdf"
                 value={optionalFileName}
@@ -133,7 +133,7 @@ const UploadBerkas = ({ changeStep }) => {
 
           <div className="flex flex-wrap w-full">
             <button
-              className="mt-10 mx-auto py-1 font-semibold px-48 rounded-full bg-sky-700 text-white w-full"
+              className="mt-10 mx-auto py-1 font-semibold rounded-full bg-sky-700 text-white w-full"
               type="submit"
             >
               Ajukan Proposal

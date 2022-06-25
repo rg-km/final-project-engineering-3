@@ -163,7 +163,7 @@ function MitraInformation() {
           </div>
           <div className="flex">
             <button
-              className="mt-5 mx-auto py-3 font-semibold px-48 rounded-full bg-black text-white relative"
+              className="mt-5 mx-auto py-3 font-semibold w-full rounded-full bg-black text-white relative"
               type="submit"
               disabled={isLoading}
             >
