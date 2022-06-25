@@ -9,11 +9,11 @@ import (
 )
 
 type HTTPReqInfo struct {
-	method  string
-	url     string
-	ipaddr  string
-	code int
-	duration  time.Duration
+	method   string
+	url      string
+	ipaddr   string
+	code     int
+	duration time.Duration
 }
 
 func Logger(h http.Handler) http.Handler {
@@ -21,10 +21,10 @@ func Logger(h http.Handler) http.Handler {
 		m := httpsnoop.CaptureMetrics(h, w, r)
 
 		reqInfo := HTTPReqInfo{
-			method:  r.Method,
-			url: r.URL.String(),
-			ipaddr:  r.RemoteAddr,
-			code: m.Code,
+			method:   r.Method,
+			url:      r.URL.String(),
+			ipaddr:   r.RemoteAddr,
+			code:     m.Code,
 			duration: m.Duration,
 		}
 
