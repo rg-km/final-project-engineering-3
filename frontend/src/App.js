@@ -19,6 +19,8 @@ import { ROLES } from './helper/constants'
 import SignupSuccess from './pages/SignupSuccess'
 
 import DataCompletedRoute from './pages/DataCompletedRoute'
+import FormPeneliti from './pages/FormPeneliti'
+import ResearcherProfile from './pages/ResearcherProfile'
 import SuccessDialog from './components/shared/SuccessDialog'
 import Footer from './components/homepage/Footer'
 
@@ -76,9 +78,16 @@ function App() {
             </Route>
           </Route>
           <Route path="proposal-status" element={<PengajuanProposal />} />
+          <Route path="researcher">
+          <Route path="information" element={<FormPeneliti />} />
+              <Route element={<DataCompletedRoute />}>
+              <Route path="profile" element={<ResearcherProfile />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<NotFound />} />
         </Route>
 
-        <Route path="*" element={<NotFound />} />
+
       </Routes>
       <Footer />
     </div>

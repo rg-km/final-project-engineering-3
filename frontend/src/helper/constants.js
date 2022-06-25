@@ -49,3 +49,26 @@ export const MITRA_CATEGORIES = [
     name: 'Pembangkit Energi',
   },
 ]
+
+export const BANK_NAME = [
+  {
+    id: 1,
+    name: 'BCA',
+  },
+  {
+    id: 2,
+    name: 'Mandiri'
+  },
+  {
+    id: 3,
+    name: 'BRI'
+  },
+  {
+    id: 4,
+    name: 'OCBC'
+  },
+  {
+    id: 5,
+    name: 'Maybank'
+  }
+]
