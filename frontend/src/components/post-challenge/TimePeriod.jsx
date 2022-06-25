@@ -38,7 +38,7 @@ function TimePeriod({ setTimePeriod, next, timePeriod }) {
         disabled={!validate()}
         onClick={handleNext}
       >
-        <span className="text-xl">Next</span>
+        <span className="text-xl">Berikutnya</span>
         <BsChevronRight fontSize={24} />
       </button>
     </div>

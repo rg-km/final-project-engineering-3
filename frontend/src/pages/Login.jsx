@@ -21,7 +21,7 @@ function Login() {
 
   return (
     <div className="flex justify-center">
-      <div className="bg-white p-8 md:p-10 mt-10 w-4/5 md:w-2/5 2xl:w-1/4">
+      <div className="bg-white p-8 md:p-10 md:mt-10 w-full md:w-2/5 2xl:w-1/4">
         <div className="flex flex-col items-center">
           <FaUserCircle fontSize={64} />
           <h2 className="mt-3 text-xl md:text-3xl font-semibold capitalize">Login</h2>

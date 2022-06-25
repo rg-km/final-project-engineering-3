@@ -1,11 +1,15 @@
 import { MdOutlineArrowForwardIos } from 'react-icons/md'
 import { AiOutlineUser } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { convertISODate } from '../../helper/utils'
 
 function ChallengeCard({ challenge }) {
+  const navigate = useNavigate()
   return (
-    <div className="border-2 bg-gray-100 rounded-md p-3 grid grid-cols-[1fr_2fr] md:grid-cols-[1fr_6fr_1fr] gap-3">
+    <div
+      className="border-2 bg-gray-100 rounded-md p-3 grid grid-cols-[1fr_2fr] md:grid-cols-[1fr_6fr_1fr] gap-3"
+      onClick={() => navigate(`${challenge.id}`)}
+    >
       <div className="flex items-center justify-center">
         <AiOutlineUser fontSize={56} />
       </div>

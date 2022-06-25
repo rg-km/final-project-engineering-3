@@ -17,6 +17,17 @@ const AjuanProposal = ({ namaResearch, bidang, namaMitra, periodeStart, periodeE
           <div className="text-xs md:text-sm mb-2">
             {convertISODate(periodeStart)} - {convertISODate(periodeEnd)}
           </div>
+          <div className="flex md:hidden ">
+            {status === APPROVAL_STATUS_NAME.Approved && (
+              <div className="text-xs md:text-sm mb-2 text-lime-500">Diterima</div>
+            )}
+            {status === APPROVAL_STATUS_NAME.Pending && (
+              <div className="text-xs md:text-sm mb-2 text-indigo-300">Pending</div>
+            )}
+            {status === APPROVAL_STATUS_NAME.Rejected && (
+              <div className="text-xs md:text-sm mb-2 text-rose-600">Ditolak</div>
+            )}
+          </div>
         </div>
         <div className="hidden md:flex items-center justify-center">
           {status === APPROVAL_STATUS_NAME.Approved && (

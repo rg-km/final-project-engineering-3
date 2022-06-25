@@ -26,69 +26,71 @@ import Footer from './components/homepage/Footer'
 
 function App() {
   return (
-    <div className="App">
+    <div className="w-full overflow-x-hidden min-h-screen flex flex-col">
       <SuccessDialog />
       <TopBar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signupsuccess" element={<SignupSuccess />} />
-        <Route
-          path="login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="signup"
-          element={
-            <PublicRoute>
-              <Signup />
-            </PublicRoute>
-          }
-        />
+      <main className="grow">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signupsuccess" element={<SignupSuccess />} />
+          <Route
+            path="login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="signup"
+            element={
+              <PublicRoute>
+                <Signup />
+              </PublicRoute>
+            }
+          />
 
-        {/* Mitra Routes */}
-        <Route element={<ProtectedRoute role={ROLES.Mitra} />}>
-          <Route element={<DataCompletedRoute />}>
-            <Route path="add-challenge" element={<PostChallenge />} />
-          </Route>
-          <Route path="posted-challenges">
-            <Route index element={<MitraChallenges />} />
-            <Route path=":challengeId">
-              <Route index element={<RegistrantList />} />
-              <Route path=":registrantId" element={<RegistrantInformation />} />
-            </Route>
-          </Route>
-          <Route path="mitra">
-            <Route path="information" element={<MitraInformation />} />
+          {/* Mitra Routes */}
+          <Route element={<ProtectedRoute role={ROLES.Mitra} />}>
             <Route element={<DataCompletedRoute />}>
-              <Route path="profile" element={<MitraProfile />} />
+              <Route path="add-challenge" element={<PostChallenge />} />
             </Route>
-          </Route>
-        </Route>
-
-        {/* Researcher Routes */}
-        <Route element={<ProtectedRoute role={ROLES.Researcher} />}>
-          <Route path="challenges">
-            <Route index element={<ChallangeList />} />
-            <Route path=":challengeId">
-              <Route index element={<ChallengeInfo />} />
+            <Route path="posted-challenges">
+              <Route index element={<MitraChallenges />} />
+              <Route path=":challengeId">
+                <Route index element={<RegistrantList />} />
+                <Route path=":registrantId" element={<RegistrantInformation />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="proposal-status" element={<PengajuanProposal />} />
-          <Route path="researcher">
-          <Route path="information" element={<FormPeneliti />} />
+            <Route path="mitra">
+              <Route path="information" element={<MitraInformation />} />
               <Route element={<DataCompletedRoute />}>
-              <Route path="profile" element={<ResearcherProfile />} />
+                <Route path="profile" element={<MitraProfile />} />
+              </Route>
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<NotFound />} />
-        </Route>
 
+          {/* Researcher Routes */}
+          <Route element={<ProtectedRoute role={ROLES.Researcher} />}>
+            <Route path="challenges">
+              <Route index element={<ChallangeList />} />
+              <Route path=":challengeId">
+                <Route index element={<ChallengeInfo />} />
+              </Route>
+            </Route>
+            <Route path="researcher">
+              <Route path="information" element={<FormPeneliti />} />
+              <Route element={<DataCompletedRoute />}>
+                <Route path="profile" element={<ResearcherProfile />} />
+              </Route>
+            </Route>
+            <Route path="proposal-status" element={<PengajuanProposal />} />
+          </Route>
 
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+
       <Footer />
     </div>
   )

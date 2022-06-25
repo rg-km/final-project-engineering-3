@@ -6,14 +6,13 @@ import useFetchData from '../hooks/useFetchData'
 import useUserStore from '../store/useUserStore'
 
 const ResearcherProfile = () => {
-    const { response, isFetching } = useFetchData(null, '/researcher/profile')
-    const user = useUserStore((state) => state.user)
-    const logout = useUserStore((state) => state.logout)
+  const { response, isFetching } = useFetchData(null, '/researcher/profile')
+  const user = useUserStore((state) => state.user)
+  const logout = useUserStore((state) => state.logout)
 
-
-    console.log(response);
-    if (isFetching || !response?.data) return <Spinner className="w-10 h-10 mt-10" />
-    return (
+  console.log(response)
+  if (isFetching || !response?.data) return <Spinner className="w-10 h-10 mt-10" />
+  return (
     <div className="container">
       <div className="grid lg:grid-cols-[1fr_2fr] gap-3">
         <div className="space-y-6">
@@ -48,7 +47,7 @@ const ResearcherProfile = () => {
               <div className="text-gray-500">{response.data.team_name}</div>
             </div>
             <div className="py-2">
-              <div className="text-xl font-semibold">Nama Ketua Team</div>
+              <div className="text-xl font-semibold">Nama Ketua Tim</div>
               <div className="text-gray-500">{response.data.leader_name}</div>
             </div>
             <div className="py-2">
@@ -79,7 +78,7 @@ const ResearcherProfile = () => {
         </div>
       </div>
     </div>
-    )
+  )
 }
 
 export default ResearcherProfile

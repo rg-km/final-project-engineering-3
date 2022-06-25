@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROLES } from '../../helper/constants'
 import useClickOutside from '../../hooks/useClickOutside'
 import useUserStore from '../../store/useUserStore'
@@ -39,6 +39,9 @@ function TopBar() {
   return (
     <div className="w-full bg-black p-6 flex justify-end items-center space-x-5">
       <div className="flex space-x-5  ">
+        <Link to="/" className="text-white font-semibold lg:text-lg">
+          Home
+        </Link>
         {user?.role === ROLES.Mitra && <MitraNavigation />}
         {user?.role === ROLES.Researcher && <ResearcherNavigation />}
       </div>

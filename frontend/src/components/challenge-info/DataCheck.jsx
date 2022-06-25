@@ -27,7 +27,7 @@ const DataCheck = ({ changeStep }) => {
 
       <div className="p-5 bg-gray-100">
         <h2 className="text-2xl font-semibold">Data Peneliti</h2>
-        <div className="grid lg:grid-cols-[1fr_2fr] gap-3 mt-8">
+        <div className="grid grid-cols-[1fr_2fr] gap-3 mt-8">
           <div className="py-2">Nama Ketua Tim</div>
           <div className="py-2">: {response.data.leader_name}</div>
           <div className="py-2">Nama Perguruan Tinggi</div>

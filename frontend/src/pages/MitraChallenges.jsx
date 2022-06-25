@@ -21,7 +21,7 @@ function MitraChallenges() {
         {response === null && (
           <div className="mx-auto mt-10 flex flex-col items-center">
             <HiOutlineEmojiSad fontSize={64} />
-            <p className="mt-2">Belum ada Challenge dari Mitra</p>
+            <p className="mt-2">Anda belum membuat challenge</p>
           </div>
         )}
       </div>
