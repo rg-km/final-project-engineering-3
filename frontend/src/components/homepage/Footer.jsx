@@ -5,7 +5,7 @@ import { FaFacebook, FaGithub, FaInstagram, FaTwitter, FaTwitch } from 'react-ic
 const Footer = () => {
   return (
     <div className="w-full 2xl:mt-24 bg-black  text-white">
-      <div className="max-w-[1240px] mx-auto grid grid-cols-2 md:grid-cols-6 border-b-2 border-gray-600 py-8">
+      <div className="max-w-[1240px] mx-auto grid grid-cols-2 md:grid-cols-6 border-b-2 border-gray-600 py-8 gap-5 text-sm md:text-base px-5 md:px-0">
         <div>
           <h6 className="font-bold uppercase pt-2">Alamat</h6>
           <ul>
@@ -25,13 +25,13 @@ const Footer = () => {
         </div>
         <div>
           <h6 className="font-bold uppercase pt-2">Call</h6>
-          <ul>
+          <ul className="">
             <li className="py-1">022 86066413</li>
           </ul>
         </div>
         <div>
           <h6 className="font-bold uppercase pt-2">Email</h6>
-          <ul>
+          <ul className="break-words">
             <li className="py-1">fundingresearch@gmail.com</li>
           </ul>
         </div>

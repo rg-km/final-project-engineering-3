@@ -5,7 +5,6 @@ import Support from '../components/homepage/Support'
 import AllInOne from '../components/homepage/AllInOne'
 import Pricing from '../components/homepage/Pricing'
 
-
 const HomePage = () => {
   return (
     <>
@@ -14,7 +13,6 @@ const HomePage = () => {
       <Support />
       <AllInOne />
       <Pricing />
-
     </>
   )
 }
