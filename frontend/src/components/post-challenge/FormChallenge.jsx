@@ -81,7 +81,7 @@ function FormChallenge({ previous, timePeriod }) {
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">Dana Funding</label>
           <div>
-            <span className="hidden  md:block p-3 border border-black">Rp.</span>
+            <span className="hidden md:inline p-3 border border-black">Rp.</span>
             <input
               type="number"
               min={0}
@@ -149,7 +149,7 @@ function FormChallenge({ previous, timePeriod }) {
         onClick={previous}
       >
         <BsChevronLeft fontSize={24} />
-        <span className="text-xl">Previous</span>
+        <span className="text-xl">Kembali</span>
       </button>
     </div>
   )

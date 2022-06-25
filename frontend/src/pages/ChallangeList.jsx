@@ -10,8 +10,8 @@ const ChallangeList = () => {
   if (isFetching) return <Spinner className="mt-10 h-10 w-10" />
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold">Challange</h1>
-      <p className="pt-4 text-slate-500">Yuk cari Challange yang cocok untuk kalian !</p>
+      <h1 className="text-2xl font-semibold">Challenge</h1>
+      <p className="pt-4 text-slate-500">Yuk cari Challenge yang cocok untuk kalian !</p>
       {response &&
         response.map((item) => {
           return (
