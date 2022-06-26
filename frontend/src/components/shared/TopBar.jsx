@@ -40,6 +40,7 @@ function TopBar() {
 
   return (
     <div className="w-full bg-black p-6 flex justify-end items-center space-x-5">
+<<<<<<< HEAD
       <div className="flex space-x-5">
         <div className='ml-10'>
           <Link to="/" className="text-white font-semibold lg:text-lg">
@@ -47,6 +48,12 @@ function TopBar() {
           </Link>
           
         </div>
+=======
+      <div className="flex space-x-5  ">
+        <Link to="/" className="text-white font-semibold lg:text-lg">
+          Home
+        </Link>
+>>>>>>> 3c1a662a710c9d3c7d00a762244ebc8867a6148b
         {user?.role === ROLES.Mitra && <MitraNavigation />}
         {user?.role === ROLES.Researcher && <ResearcherNavigation />}
       </div>

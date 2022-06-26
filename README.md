@@ -10,12 +10,14 @@ fundingresearch.com is an application for research funding between universities 
 ## Software Requirements
 - Go Language
 - SQLite
+- Ginkgo
 - Nodejs v14 or higher
 - React v18.1.0 
 - react-router-dom v6.3.0
 - tailwindcss v3.0.24
 - zustand v4.0.0-rc.1
 - react-icons v4.4.0
+- headlessui/react v1.6.5
 
 ## Installation
 **Clone it!**
@@ -31,7 +33,7 @@ go run backend/db/migration/main.go
 2. Run `main.go` inside directory `/backend` to run service
 3. Try and enjoy!
 ```
-http://localhost:8080/
+http://api.fundingresearch.com:8080
 ```
 
 **Front-End**
@@ -43,9 +45,6 @@ npm install
 npm start
 ```
 2. Try and enjoy!
-```
-http://localhost:8080/
-```
 
 ## Available APIs
 **All Role**
@@ -59,9 +58,13 @@ http://localhost:8080/
 - `POST` : `/industry/challenge/post`
 - `PUT`  : `/industry/challenge/edit?challenge_id=<challenge_id>`
 - `DEL`  : `/industry/challenge/delete?challenge_id=<challenge_id>`
+- `GET`  : `/industry/challenge/list`
 - `GET`  : `/industry/challenge/review/challengers?challenge_id=<challenge_id>`
 - `GET`  : `/industry/challenge/review/details/?review_id=<review_id>`
 - `POST` : `/industry/challenge/review/details/approval?review_id=<review_id>`
+- `GET`  : `/industry/challenge/list`
+- `GET`  : `/industry/logo?file_name=<file_location_and_file_name>`
+- `GET`  : `/proposal/files?file_name=<file_location_and_name>`
 
 **Researcher Role**
 - `GET`  : `/researcher/profile`
@@ -69,11 +72,12 @@ http://localhost:8080/
 - `GET`  : `/research/details?challenge_id=<challenge_id>`
 - `POST` : `/researcher/challenge/apply?challenge_id=<challenge_id>`
 - `POST` : `/researcher/challenge/upload?proposal_id=<proposal_id>`
-- `POST` : `/researcher/profile/add`
-- `GET`  : `/researcher/chalange/list`
+- `PUT` : `/researcher/profile/edit`
+- `GET`  : `/researcher/challenge/list`
 - `GET`  : `/researcher/challenge/details?challenge_id=<challenge_id>`
+- `GET`  : `/research/guide-file?challenge_id=10>`
 
-API documentation can be found at <link-to-postman-api.com>
+API documentation can be found at <https://documenter.getpostman.com/view/21460421/UzBjrSiV>
 
 ## Contributors
 - FE2025536	ADRIAN OCTAVIUS <https://github.com/adrnct>

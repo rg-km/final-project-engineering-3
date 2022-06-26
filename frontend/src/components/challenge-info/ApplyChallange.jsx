@@ -1,13 +1,24 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { MdArrowBackIos } from 'react-icons/md'
 import { AiOutlineUser } from 'react-icons/ai'
 import { BsDownload } from 'react-icons/bs'
 import Accordion from '../shared/Accordion'
+import Spinner from '../shared/Spinner'
+import useFetchData from '../../hooks/useFetchData'
+import ErrorMessage from '../shared/ErrorMessage'
+import { convertISODate, rupiahFormat } from '../../helper/utils'
 
 const ApplyChallange = ({ changeStep }) => {
   const navigate = useNavigate()
+  const { challengeId } = useParams()
+  const { response, isFetching } = useFetchData(
+    null,
+    `/research/details?challenge_id=${challengeId}`,
+  )
 
+  if (isFetching) return <Spinner className="mt-10 h-10 w-10" />
+  if (!response) return <ErrorMessage message="Challenge tidak ditemukan!" />
   return (
     <div className="container">
       <div className="flex flex-wrap w-auto">
@@ -34,60 +45,45 @@ const ApplyChallange = ({ changeStep }) => {
               <AiOutlineUser fontSize={64} />
             </div>
             <div className="mt-2 space-y-2 text-center lg:text-left">
-              <div className="text-xl font-semibold">Nama Research</div>
-              <div className="text-sm">Bidang Research</div>
-              <div className="text-sm">Nama Mitra</div>
-              <div className="text-sm">Periode</div>
+              <div className="text-xl font-semibold">{response.data.name}</div>
+              <div className="text-sm">{response.data.research_category}</div>
+              <div className="text-sm">{response.data.industry_name}</div>
             </div>
           </div>
           <div>
             <div className="text-xl font-semibold mb-3">Download</div>
-            <button className="p-2 flex space-x-3 items-center bg-gray-100 w-full rounded-md">
+            <a
+              href={`http://localhost:8080/research/guide-file?challenge_id=${challengeId}`}
+              target="_blank"
+              download
+              rel="noopener noreferrer"
+              className="p-2 flex space-x-3 items-center bg-gray-100 w-full rounded-md"
+            >
               <BsDownload />
               <span className="font-semibold">File Panduan</span>
-            </button>
+            </a>
           </div>
         </div>
         <div className="px-5 bg-gray-100">
           <div className="flex flex-col mt-5 divide-y-2 space-y-3">
             <div className="py-2">
               <div className="text-xl font-semibold">Periode Pendaftaran</div>
-              <div className="text-gray-500">2000-2000</div>
+              <div className="text-gray-500">
+                {convertISODate(response.data.period_start)} -
+                {convertISODate(response.data.period_end)}
+              </div>
+            </div>
+            <div className="py-2">
+              <div className="text-xl font-semibold">Kuota Pendaftaran</div>
+              <div className="text-gray-500">{response.data.quota}</div>
             </div>
             <div className="py-2">
               <div className="text-xl font-semibold">Dana Funding</div>
-              <div className="text-gray-500">Rp. 1000</div>
-            </div>
-            <div className="py-4">
-              <Accordion title={'Deskripsi'} isOpen={true}>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, asperiores!
-                  Excepturi voluptates praesentium numquam accusantium maiores fuga natus placeat
-                  facilis odit, consequuntur modi hic laudantium pariatur magni quisquam tempore
-                  labore veniam laborum eligendi nemo architecto repudiandae. Explicabo saepe
-                  quisquam corrupti velit laborum fugiat quis aut, quia provident doloribus
-                  aspernatur modi excepturi, hic unde. Illum reprehenderit animi officiis
-                  voluptatibus molestias nam soluta sed facere, iusto amet accusantium tempore
-                  cumque ipsa, odit, quo optio. Aut porro fugiat quasi pariatur vitae, facilis
-                  labore, ipsa eum amet tempora nesciunt minima debitis eligendi, nulla provident
-                  inventore et adipisci hic animi repudiandae. At fuga dolor officiis.
-                </p>
-              </Accordion>
+              <div className="text-gray-500">{rupiahFormat(response.data.max_funding)}</div>
             </div>
             <div className="py-4">
               <Accordion title={'Rincian Kegiatan'} isOpen={true}>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, asperiores!
-                  Excepturi voluptates praesentium numquam accusantium maiores fuga natus placeat
-                  facilis odit, consequuntur modi hic laudantium pariatur magni quisquam tempore
-                  labore veniam laborum eligendi nemo architecto repudiandae. Explicabo saepe
-                  quisquam corrupti velit laborum fugiat quis aut, quia provident doloribus
-                  aspernatur modi excepturi, hic unde. Illum reprehenderit animi officiis
-                  voluptatibus molestias nam soluta sed facere, iusto amet accusantium tempore
-                  cumque ipsa, odit, quo optio. Aut porro fugiat quasi pariatur vitae, facilis
-                  labore, ipsa eum amet tempora nesciunt minima debitis eligendi, nulla provident
-                  inventore et adipisci hic animi repudiandae. At fuga dolor officiis.
-                </p>
+                <p>{response.data.details}</p>
               </Accordion>
             </div>
           </div>

@@ -539,3 +539,42 @@ func (api *API) downloadGuideFile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/pdf")
 	http.ServeContent(w, r, "guide.pdf", time.Now(), file)
 }
+
+func (api *API) getChallengeByIndustryId(w http.ResponseWriter, r *http.Request) {
+	api.AllowOrigin(w, r)
+
+	username := r.Context().Value("username")
+
+	userId, err := api.usersRepo.FetchUserIdByUsername(username.(string))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ResearchProposalErrorResponse{Error: ResearchProposalErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	industryId, err := api.usersRepo.FetchIndustryIdByUserId(*userId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ResearchProposalErrorResponse{Error: ResearchProposalErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	challengeByIndustryId, err := api.industryChallengeRepo.GetChallengeByIndustryId(*industryId)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ResearchProposalErrorResponse{Error: ResearchProposalErrorDetailResponse{
+			Name:    "Internal Server Error",
+			Message: err.Error(),
+		}})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(challengeByIndustryId)
+}

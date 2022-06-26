@@ -9,6 +9,12 @@ export const APPROVAL_STATUS = {
   Rejected: 3,
 }
 
+export const APPROVAL_STATUS_NAME = {
+  Pending: 'Reviewed',
+  Approved: 'Funded',
+  Rejected: 'Rejected',
+}
+
 export const MITRA_CATEGORIES = [
   {
     id: 1,
@@ -42,4 +48,27 @@ export const MITRA_CATEGORIES = [
     id: 8,
     name: 'Pembangkit Energi',
   },
+]
+
+export const BANK_NAME = [
+  {
+    id: 1,
+    name: 'BCA',
+  },
+  {
+    id: 2,
+    name: 'Mandiri'
+  },
+  {
+    id: 3,
+    name: 'BRI'
+  },
+  {
+    id: 4,
+    name: 'OCBC'
+  },
+  {
+    id: 5,
+    name: 'Maybank'
+  }
 ]

@@ -11,7 +11,7 @@ const SignupForm = ({ role }) => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
-  const signup = useSignupStore((state)=>state.signup)
+  const signup = useSignupStore((state) => state.signup)
   const errorMessage = useSignupErrorMessage()
   let role_id = 0
 
@@ -24,11 +24,10 @@ const SignupForm = ({ role }) => {
     } catch (error) {
       signup({ username, email, password, role_id })
     }
-
   }
 
   return (
-    <div className="bg-white p-10 mt-10 w-1/4">
+    <div className="bg-white p-10 md:mt-10 w-full md:w-2/5 2xl:w-1/4">
       <div className="flex flex-col items-center">
         <FaUserCircle fontSize={64} />
         <h2 className="mt-3 text-3xl font-semibold capitalize">{role}</h2>
@@ -61,11 +60,9 @@ const SignupForm = ({ role }) => {
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
           </div>
-          {errorMessage && (
-                  <div className="mt-2 text-red-500 italic text-sm">{errorMessage}</div>
-          )}
+          {errorMessage && <div className="mt-2 text-red-500 italic text-sm">{errorMessage}</div>}
           <div>
-            <button className="w-full py-3 bg-black rounded-full text-white" type='submit'>
+            <button className="w-full py-3 bg-black rounded-full text-white" type="submit">
               Daftar
             </button>
           </div>

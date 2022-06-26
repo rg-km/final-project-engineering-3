@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import axiosClient from '../../config/axiosClient'
+import useDialogStore from '../../store/useDialogStore'
 import Spinner from '../shared/Spinner'
 
 function FormChallenge({ previous, timePeriod }) {
@@ -10,6 +11,7 @@ function FormChallenge({ previous, timePeriod }) {
 
   const [filename, setFilename] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { openDialog } = useDialogStore()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,7 +29,15 @@ function FormChallenge({ previous, timePeriod }) {
       })
       console.log(data)
       setIsLoading(false)
-      navigate('/posted-challenges')
+      openDialog(
+        {
+          title: 'Berhasil',
+          message: 'Challenge berhasil dibuat',
+        },
+        () => {
+          navigate('/posted-challenges')
+        },
+      )
     } catch (err) {
       setIsLoading(false)
       console.error(err)
@@ -71,12 +81,12 @@ function FormChallenge({ previous, timePeriod }) {
         <div className="space-y-3 flex flex-col">
           <label htmlFor="">Dana Funding</label>
           <div>
-            <span className="p-3 border border-black">Rp.</span>
+            <span className="hidden md:inline p-3 border border-black">Rp.</span>
             <input
               type="number"
               min={0}
               max={Infinity}
-              className="border border-black p-2 outline-none focus:border-blue-700"
+              className="w-full md:w-auto border border-black p-2 outline-none focus:border-blue-700"
               name="max_funding"
               defaultValue={0}
               required
@@ -100,7 +110,7 @@ function FormChallenge({ previous, timePeriod }) {
             <div className="flex mt-2">
               <input
                 type="text"
-                className=" flex-grow border border-black outline-none px-3 focus:border-blue-700"
+                className="w-4/5 lg:grow lg:w-auto border border-black outline-none px-3 focus:border-blue-700"
                 readOnly
                 placeholder="Upload file..."
                 value={filename}
@@ -113,6 +123,7 @@ function FormChallenge({ previous, timePeriod }) {
                   name="guide_file"
                   onChange={(e) => setFilename(e.target.files[0].name)}
                   required
+                  accept=".pdf"
                 />
               </div>
             </div>
@@ -138,7 +149,7 @@ function FormChallenge({ previous, timePeriod }) {
         onClick={previous}
       >
         <BsChevronLeft fontSize={24} />
-        <span className="text-xl">Previous</span>
+        <span className="text-xl">Kembali</span>
       </button>
     </div>
   )
